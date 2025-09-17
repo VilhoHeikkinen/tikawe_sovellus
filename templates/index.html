@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Arvostelusovellus</title>
+</head>
+
+<body>
+  <h1>Arvostelusovellus</h1>
+  {% if session.username %}
+    <p>
+      Olet kirjautunut nimellä {{ session.username }}
+    </p>
+    <p>
+      <a href="/logout">Kirjaudu ulos</a>
+    </p>
+    {% else %}
+    <p>
+      <a href="/login">Kirjaudu sisään</a> <br />
+      <a href="/register">Luo tunnus</a>
+    </p>
+  {% endif %}
+</html>

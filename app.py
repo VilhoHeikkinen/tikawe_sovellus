@@ -11,7 +11,7 @@ app.secret_key = config.secret_key
 
 @app.route("/")
 def index():
-    return "Arvostelusovellus"
+    return render_template("/index.html")
 
 @app.route("/register")
 def register():
