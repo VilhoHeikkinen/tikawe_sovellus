@@ -13,6 +13,22 @@ app.secret_key = config.secret_key
 def index():
     return render_template("/index.html")
 
+@app.route("/new_review")
+def new_review():
+    return render_template("/new_review.html")
+
+@app.route("/create_review", methods=["POST"])
+def create_review():
+    artist_name = request.form["artist"]
+    album_name = request.form["album_name"]
+    genre = request.form["genre"]
+    review = request.form["review"]
+    
+    sql = "INSERT INTO reviews (artist, album_name, genre, review, user_id) VALUES (?, ?, ?, ?, ?)"
+    db.execute(sql, [artist_name, album_name, genre, review, session["user_id"]])
+    
+    return "Arvio lähetetty"
+
 @app.route("/register")
 def register():
     return render_template("/register.html")
@@ -32,7 +48,7 @@ def create():
     except sqlite3.IntegrityError:
         return "VIRHE: tunnus on jo varattu"
 
-    return "Tunnus luotu"
+    return render_template("/")
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -43,10 +59,13 @@ def login():
         username = request.form["username"]
         password = request.form["password"]
         
-        sql = "SELECT password_hash FROM users WHERE username = ?"
-        password_hash = db.query(sql, [username])[0][0]
+        sql = "SELECT id, password_hash FROM users WHERE username = ?"
+        result = db.query(sql, [username])[0]
+        user_id = result["id"]
+        password_hash = result["password_hash"]
         
         if check_password_hash(password_hash, password):
+            session["user_id"] = user_id
             session["username"] = username
             return redirect("/")
         else:
@@ -54,5 +73,6 @@ def login():
     
 @app.route("/logout")
 def logout():
+    del session["user_id"]
     del session["username"]
     return redirect("/")
