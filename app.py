@@ -35,6 +35,21 @@ def view_review(review_id):
     review = reviews.get_review(review_id)
     return render_template("view_review.html", review=review)
 
+@app.route("/edit/<int:review_id>", methods=["GET","POST"])
+def edit_review(review_id):
+    review = reviews.get_review(review_id)
+    
+    if request.method == "GET":
+        return render_template("edit_review.html", review=review)
+    
+    if request.method == "POST":
+        artist_name = request.form["artist"]
+        album_name = request.form["album_name"]
+        genre = request.form["genre"]
+        review = request.form["review"]
+        reviews.edit_review(artist_name, album_name, genre, review, review_id)
+        return redirect(f"/review/{str(review_id)}")
+
 @app.route("/register")
 def register():
     return render_template("/register.html")

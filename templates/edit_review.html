@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Muokkaa arvostelua</title>
+</head>
+
+<body>
+  <h1>Muokkaa arvostelua</h1>
+  <form action="/edit/{{ review.id }}" method="post">
+    <p>
+      Artisti: <br />
+      <input type="text" name="artist" value="{{ review.artist }}" />
+    </p>
+    <p>
+      Albumin tai kappaleen nimi: <br />
+      <input type="text" name="album_name" value="{{ review.album_name }}" />
+    </p>
+    <p>
+      Genre: <br />
+      <input type="text" name="genre" value="{{ review.genre }}" />
+    </p>
+    <p>
+      Arvio: <br />
+      <textarea name="review" rows="5" cols="40">{{ review.review }}</textarea>
+    </p>
+    <input type="submit" value="Valmis" />
+  </form>
+</body>
+
+</html>

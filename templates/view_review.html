@@ -12,6 +12,10 @@
   <p>
     {{ review.review }}
   </p>
+
+  {% if session.username == review.username %}
+  <a href="/edit/{{ review.id }}">Muokkaa arvostelua</a>
+  {% endif %}
 </body>
 
 </html>

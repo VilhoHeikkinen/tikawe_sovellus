@@ -10,7 +10,8 @@ def get_reviews():
     return db.query(sql)
 
 def get_review(review_id):
-    sql = """SELECT reviews.artist, 
+    sql = """SELECT reviews.id,
+                    reviews.artist, 
                     reviews.album_name, 
                     reviews.genre, 
                     reviews.review,
@@ -19,3 +20,11 @@ def get_review(review_id):
              WHERE reviews.user_id = users.id
              AND reviews.id = ?"""
     return db.query(sql, [review_id])[0]
+
+def edit_review(artist_name, album_name, genre, review, review_id):
+    sql = """UPDATE reviews SET artist = ?,
+                                album_name = ?,
+                                genre = ?,
+                                review = ?
+             WHERE id = ?"""
+    db.execute(sql, [artist_name, album_name, genre, review, review_id])
