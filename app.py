@@ -5,6 +5,7 @@ from flask import session
 from werkzeug.security import generate_password_hash, check_password_hash
 import db
 import config
+import reviews
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
@@ -23,10 +24,9 @@ def create_review():
     album_name = request.form["album_name"]
     genre = request.form["genre"]
     review = request.form["review"]
-    
-    sql = "INSERT INTO reviews (artist, album_name, genre, review, user_id) VALUES (?, ?, ?, ?, ?)"
-    db.execute(sql, [artist_name, album_name, genre, review, session["user_id"]])
-    
+
+    reviews.add_review(artist_name, album_name, genre, review, session["user_id"])
+
     return "Arvio lähetetty"
 
 @app.route("/register")
