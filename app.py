@@ -49,6 +49,11 @@ def edit_review(review_id):
         review = request.form["review"]
         reviews.edit_review(artist_name, album_name, genre, review, review_id)
         return redirect(f"/review/{str(review_id)}")
+    
+@app.route("/remove/<int:review_id>")
+def remove_review(review_id):
+    reviews.delete_review(review_id)
+    return redirect("/")
 
 @app.route("/register")
 def register():
