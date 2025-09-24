@@ -12,7 +12,8 @@ app.secret_key = config.secret_key
 
 @app.route("/")
 def index():
-    return render_template("/index.html")
+    recent_reviews = reviews.get_reviews()
+    return render_template("/index.html", reviews = recent_reviews)
 
 @app.route("/new_review")
 def new_review():

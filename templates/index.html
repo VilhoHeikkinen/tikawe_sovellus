@@ -24,4 +24,9 @@
       <a href="/register">Luo tunnus</a>
     </p>
   {% endif %}
+
+  <h2>Arvostelut</h2>
+  {% for review in reviews %}
+    <a href="/review/{{ review.id }}">{{ review.artist }} {{ review.album_name }}</a> <br / >
+  {% endfor %}
 </html>
