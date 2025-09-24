@@ -30,6 +30,11 @@ def create_review():
 
     return redirect("/")
 
+@app.route("/review/<int:review_id>")
+def view_review(review_id):
+    review = reviews.get_review(review_id)
+    return render_template("view_review.html", review=review)
+
 @app.route("/register")
 def register():
     return render_template("/register.html")
