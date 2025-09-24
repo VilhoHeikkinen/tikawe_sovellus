@@ -27,7 +27,7 @@ def create_review():
 
     reviews.add_review(artist_name, album_name, genre, review, session["user_id"])
 
-    return "Arvio lähetetty"
+    return redirect("/")
 
 @app.route("/register")
 def register():
