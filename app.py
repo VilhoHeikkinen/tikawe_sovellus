@@ -24,9 +24,10 @@ def create_review():
     artist_name = request.form["artist"]
     album_name = request.form["album_name"]
     genre = request.form["genre"]
+    stars = request.form["stars"]
     review = request.form["review"]
 
-    reviews.add_review(artist_name, album_name, genre, review, session["user_id"])
+    reviews.add_review(artist_name, album_name, genre, stars, review, session["user_id"])
 
     return redirect("/")
 
@@ -46,8 +47,9 @@ def edit_review(review_id):
         artist_name = request.form["artist"]
         album_name = request.form["album_name"]
         genre = request.form["genre"]
+        stars = request.form["stars"]
         review = request.form["review"]
-        reviews.edit_review(artist_name, album_name, genre, review, review_id)
+        reviews.edit_review(artist_name, album_name, genre, stars, review, review_id)
         return redirect(f"/review/{str(review_id)}")
     
 @app.route("/remove/<int:review_id>", methods=["GET", "POST"])

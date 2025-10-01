@@ -1,19 +1,20 @@
 import db
 
-def add_review(artist_name, album_name, genre, review, user_id):
-    sql = """INSERT INTO reviews (artist, album_name, genre, review, user_id) 
-             VALUES (?, ?, ?, ?, ?)"""
-    db.execute(sql, [artist_name, album_name, genre, review, user_id])
+def add_review(artist_name, album_name, genre, stars, review, user_id):
+    sql = """INSERT INTO reviews (artist, album_name, genre, stars, review, user_id)
+             VALUES (?, ?, ?, ?, ?, ?)"""
+    db.execute(sql, [artist_name, album_name, genre, stars, review, user_id])
 
 def get_reviews():
-    sql = "SELECT id, artist, album_name FROM reviews ORDER BY id DESC"
+    sql = "SELECT id, artist, album_name, stars FROM reviews ORDER BY id DESC"
     return db.query(sql)
 
 def get_review(review_id):
     sql = """SELECT reviews.id,
                     reviews.artist, 
                     reviews.album_name, 
-                    reviews.genre, 
+                    reviews.genre,
+                    reviews.stars,
                     reviews.review,
                     users.username
              FROM reviews, users 
@@ -21,13 +22,14 @@ def get_review(review_id):
              AND reviews.id = ?"""
     return db.query(sql, [review_id])[0]
 
-def edit_review(artist_name, album_name, genre, review, review_id):
+def edit_review(artist_name, album_name, genre, stars, review, review_id):
     sql = """UPDATE reviews SET artist = ?,
                                 album_name = ?,
                                 genre = ?,
+                                stars = ?,
                                 review = ?
              WHERE id = ?"""
-    db.execute(sql, [artist_name, album_name, genre, review, review_id])
+    db.execute(sql, [artist_name, album_name, genre, stars, review, review_id])
 
 def delete_review(review_id):
     sql = "DELETE FROM reviews WHERE id = ?"

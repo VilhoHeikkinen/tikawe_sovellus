@@ -33,7 +33,8 @@
     </p>
   </form>
   {% for review in reviews %}
-    <a href="/review/{{ review.id }}">{{ review.artist }}, {{ review.album_name }}</a> <br / >
+    <a href="/review/{{ review.id }}">{{ review.artist }}, {{ review.album_name }}, 
+      tähtiä {{ review.stars }}/5</a> <br / >
   {% endfor %}
   
 </html>

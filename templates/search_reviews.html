@@ -12,7 +12,8 @@
   <h3>Tulokset hakusanalla {{ query }}:</h3>
   {% if reviews %}
     {% for review in reviews %}
-      <a href="/review/{{ review.id }}">{{ review.artist }}, {{ review.album_name }}</a> <br / >
+      <a href="/review/{{ review.id }}">{{ review.artist }}, {{ review.album_name }}, 
+      tähtiä {{ review.stars }}/5</a> <br / >
     {% endfor %}
   {% else %}
     <p>

@@ -9,6 +9,7 @@ CREATE TABLE reviews (
     artist TEXT,
     album_name TEXT,
     genre TEXT,
+    stars FLOAT,
     review TEXT,
     user_id INTEGER REFERENCES users
 );
