@@ -50,10 +50,20 @@ def edit_review(review_id):
         reviews.edit_review(artist_name, album_name, genre, review, review_id)
         return redirect(f"/review/{str(review_id)}")
     
-@app.route("/remove/<int:review_id>")
+@app.route("/remove/<int:review_id>", methods=["GET", "POST"])
 def remove_review(review_id):
-    reviews.delete_review(review_id)
-    return redirect("/")
+    review = reviews.get_review(review_id)
+    
+    if request.method == "GET":
+        return render_template("remove_review.html", review=review)
+    
+    if request.method == "POST":
+        if "continue" in request.form:
+            reviews.delete_review(review_id)
+            return redirect("/")
+        if "cancel" in request.form:
+            return redirect(f"/review/{str(review_id)}")
+    
 
 @app.route("/register")
 def register():
