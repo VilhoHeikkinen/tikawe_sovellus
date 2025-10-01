@@ -45,10 +45,7 @@ def edit_review(review_id):
         abort(404)
 
     current_id = review["user_id"]
-    try:
-        session_id = session["user_id"]
-    except KeyError:
-        session_id = None
+    session_id = session["user_id"] if "user_id" in session else None
 
     if current_id != session_id:
         abort(403)
@@ -73,10 +70,7 @@ def remove_review(review_id):
         abort(404)
 
     current_id = review["user_id"]
-    try:
-        session_id = session["user_id"]
-    except KeyError:
-        session_id = None
+    session_id = session["user_id"] if "user_id" in session else None
 
     if current_id != session_id:
         abort(403)
