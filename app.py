@@ -63,8 +63,17 @@ def remove_review(review_id):
             return redirect("/")
         if "cancel" in request.form:
             return redirect(f"/review/{str(review_id)}")
+        
+@app.route("/search_reviews")
+def search_reviews():
+    query = request.args.get("query")
+    if query:
+        searched_reviews = reviews.search(query)
+    else:
+        query = ""
+        searched_reviews = ""
+    return render_template("/search_reviews.html", reviews=searched_reviews, query=query)
     
-
 @app.route("/register")
 def register():
     return render_template("/register.html")
