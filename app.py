@@ -49,7 +49,7 @@ def edit_review(review_id):
         session_id = session["user_id"]
     except KeyError:
         session_id = None
-        
+
     if current_id != session_id:
         abort(403)
 
@@ -64,7 +64,7 @@ def edit_review(review_id):
         review = request.form["review"]
         reviews.edit_review(artist_name, album_name, genre, stars, review, review_id)
         return redirect(f"/review/{str(review_id)}")
-    
+
 @app.route("/remove/<int:review_id>", methods=["GET", "POST"])
 def remove_review(review_id):
     review = reviews.get_review(review_id)
@@ -90,7 +90,7 @@ def remove_review(review_id):
             return redirect("/")
         if "cancel" in request.form:
             return redirect(f"/review/{str(review_id)}")
-        
+  
 @app.route("/search_reviews")
 def search_reviews():
     query = request.args.get("query")
@@ -126,23 +126,23 @@ def create():
 def login():
     if request.method == "GET":
         return render_template("/login.html")
-    
+
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
-        
+
         sql = "SELECT id, password_hash FROM users WHERE username = ?"
         result = db.query(sql, [username])[0]
         user_id = result["id"]
         password_hash = result["password_hash"]
-        
+
         if check_password_hash(password_hash, password):
             session["user_id"] = user_id
             session["username"] = username
             return redirect("/")
         else:
             return "VIRHE: väärä tunnus tai salasana"
-    
+
 @app.route("/logout")
 def logout():
     del session["user_id"]
