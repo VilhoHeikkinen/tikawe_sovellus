@@ -14,8 +14,10 @@
   </p>
 
   {% if session.username == review.username %}
-  <a href="/edit/{{ review.id }}">Muokkaa arvostelua</a> <br />
-  <a href="/remove/{{ review.id }}">Poista arvostelu</a>
+  <p>
+    <a href="/edit/{{ review.id }}">Muokkaa arvostelua</a>
+    <a href="/remove/{{ review.id }}">Poista arvostelu</a>
+  </p>
   {% endif %}
 </body>
 
