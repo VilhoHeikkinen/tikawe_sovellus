@@ -1,7 +1,6 @@
 import sqlite3
 from flask import Flask
-from flask import redirect, render_template, request
-from flask import session
+from flask import redirect, render_template, request, session, abort
 from werkzeug.security import generate_password_hash, check_password_hash
 import db
 import config
@@ -39,10 +38,18 @@ def view_review(review_id):
 @app.route("/edit/<int:review_id>", methods=["GET", "POST"])
 def edit_review(review_id):
     review = reviews.get_review(review_id)
-    
+    current_id = review["user_id"]
+    try:
+        session_id = session["user_id"]
+    except KeyError:
+        session_id = None
+        
+    if current_id != session_id:
+        abort(403)
+
     if request.method == "GET":
         return render_template("edit_review.html", review=review)
-    
+
     if request.method == "POST":
         artist_name = request.form["artist"]
         album_name = request.form["album_name"]
@@ -55,6 +62,15 @@ def edit_review(review_id):
 @app.route("/remove/<int:review_id>", methods=["GET", "POST"])
 def remove_review(review_id):
     review = reviews.get_review(review_id)
+    
+    current_id = review["user_id"]
+    try:
+        session_id = session["user_id"]
+    except KeyError:
+        session_id = None
+        
+    if current_id != session_id:
+        abort(403)
     
     if request.method == "GET":
         return render_template("remove_review.html", review=review)

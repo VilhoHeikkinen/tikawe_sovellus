@@ -16,6 +16,7 @@ def get_review(review_id):
                     reviews.genre,
                     reviews.stars,
                     reviews.review,
+                    reviews.user_id,
                     users.username
              FROM reviews, users 
              WHERE reviews.user_id = users.id
