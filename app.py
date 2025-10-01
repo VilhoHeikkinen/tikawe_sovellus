@@ -33,11 +33,17 @@ def create_review():
 @app.route("/review/<int:review_id>")
 def view_review(review_id):
     review = reviews.get_review(review_id)
+    if not review:
+        abort(404)
     return render_template("view_review.html", review=review)
 
 @app.route("/edit/<int:review_id>", methods=["GET", "POST"])
 def edit_review(review_id):
     review = reviews.get_review(review_id)
+
+    if not review:
+        abort(404)
+
     current_id = review["user_id"]
     try:
         session_id = session["user_id"]
@@ -62,19 +68,22 @@ def edit_review(review_id):
 @app.route("/remove/<int:review_id>", methods=["GET", "POST"])
 def remove_review(review_id):
     review = reviews.get_review(review_id)
-    
+
+    if not review:
+        abort(404)
+
     current_id = review["user_id"]
     try:
         session_id = session["user_id"]
     except KeyError:
         session_id = None
-        
+
     if current_id != session_id:
         abort(403)
-    
+
     if request.method == "GET":
         return render_template("remove_review.html", review=review)
-    
+
     if request.method == "POST":
         if "continue" in request.form:
             reviews.delete_review(review_id)
@@ -91,7 +100,7 @@ def search_reviews():
         query = ""
         searched_reviews = ""
     return render_template("/search_reviews.html", reviews=searched_reviews, query=query)
-    
+
 @app.route("/register")
 def register():
     return render_template("/register.html")
