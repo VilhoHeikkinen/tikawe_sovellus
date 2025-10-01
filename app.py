@@ -35,7 +35,7 @@ def view_review(review_id):
     review = reviews.get_review(review_id)
     return render_template("view_review.html", review=review)
 
-@app.route("/edit/<int:review_id>", methods=["GET","POST"])
+@app.route("/edit/<int:review_id>", methods=["GET", "POST"])
 def edit_review(review_id):
     review = reviews.get_review(review_id)
     
@@ -74,7 +74,7 @@ def create():
     except sqlite3.IntegrityError:
         return "VIRHE: tunnus on jo varattu"
 
-    return render_template("/")
+    return redirect("/")
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
