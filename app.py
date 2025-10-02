@@ -9,6 +9,16 @@ import reviews
 app = Flask(__name__)
 app.secret_key = config.secret_key
 
+def check_login():
+    if "user_id" not in session:
+        abort(403)
+
+def check_id(id):
+    session_id = session["user_id"] if "user_id" in session else None
+
+    if id != session_id:
+        abort(403)
+
 @app.route("/")
 def index():
     recent_reviews = reviews.get_reviews()
@@ -16,10 +26,12 @@ def index():
 
 @app.route("/new_review")
 def new_review():
+    check_login()
     return render_template("/new_review.html")
 
 @app.route("/create_review", methods=["POST"])
 def create_review():
+    check_login()
     artist_name = request.form["artist"]
     album_name = request.form["album_name"]
     genre = request.form["genre"]
@@ -44,11 +56,7 @@ def edit_review(review_id):
     if not review:
         abort(404)
 
-    current_id = review["user_id"]
-    session_id = session["user_id"] if "user_id" in session else None
-
-    if current_id != session_id:
-        abort(403)
+    check_id(review["user_id"])
 
     if request.method == "GET":
         return render_template("edit_review.html", review=review)
@@ -69,11 +77,7 @@ def remove_review(review_id):
     if not review:
         abort(404)
 
-    current_id = review["user_id"]
-    session_id = session["user_id"] if "user_id" in session else None
-
-    if current_id != session_id:
-        abort(403)
+    check_id(review["user_id"])
 
     if request.method == "GET":
         return render_template("remove_review.html", review=review)
