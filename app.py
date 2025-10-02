@@ -5,6 +5,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import db
 import config
 import reviews
+import maxlengths
+import re
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
@@ -17,6 +19,11 @@ def check_id(id):
     session_id = session["user_id"] if "user_id" in session else None
 
     if id != session_id:
+        abort(403)
+        
+def check_length(field, user_input):
+    maxlength = maxlengths.map[field]
+    if len(user_input) > maxlength:
         abort(403)
 
 @app.route("/")
@@ -36,7 +43,16 @@ def create_review():
     album_name = request.form["album_name"]
     genre = request.form["genre"]
     stars = request.form["stars"]
+
+    # Check if stars is a number in between 0 and 5 with max one decimal place
+    # and a comma or a dot is used
+    if not re.search("^(?:[0-4](?:[.,]\d)?|5(?:\.0)?)$", stars):
+        abort(403)
+
     review = request.form["review"]
+
+    for field, user_input in request.form.items():
+        check_length(field, user_input)
 
     reviews.add_review(artist_name, album_name, genre, stars, review, session["user_id"])
 
