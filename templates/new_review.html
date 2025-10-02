@@ -9,11 +9,11 @@
   <form action="/create_review" method="post">
     <p>
       Artisti: <br />
-      <input type="text" name="artist" maxlength="50" />
+      <input type="text" name="artist" maxlength="50" required />
     </p>
     <p>
       Albumin tai kappaleen nimi: <br />
-      <input type="text" name="album_name" maxlength="50" />
+      <input type="text" name="album_name" maxlength="50" required />
     </p>
     <p>
       Genre: <br />
@@ -21,11 +21,11 @@
     </p>
     <p>
       Tähtiä: <input type="text" name="stars" maxlength="3" 
-               required pattern="^(?:[0-4](?:[.,]\d)?|5(?:\.0)?)$"/>/5
+               pattern="^(?:[0-4](?:[.,]\d)?|5(?:\.0)?)$" required />/5
     </p>
     <p>
       Arvio: <br />
-      <textarea name="review" rows="10" cols="60" maxlength="3000"></textarea> <br />
+      <textarea name="review" rows="10" cols="60" maxlength="3000" required></textarea> <br />
       maksimipituus: 3000 merkkiä
     </p>
     <input type="submit" value="Julkaise arvostelu" />
