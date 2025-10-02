@@ -23,7 +23,7 @@ def check_id(id):
         
 def check_length(field, user_input):
     maxlength = maxlengths.map[field]
-    if len(user_input) > maxlength:
+    if len(user_input) == 0 or len(user_input) > maxlength:
         abort(403)
 
 @app.route("/")
@@ -82,7 +82,17 @@ def edit_review(review_id):
         album_name = request.form["album_name"]
         genre = request.form["genre"]
         stars = request.form["stars"]
+
+        # Check if stars is a number in between 0 and 5 with max one decimal place
+        # and a comma or a dot is used
+        if not re.search("^(?:[0-4](?:[.,]\d)?|5(?:\.0)?)$", stars):
+            abort(403)
+
         review = request.form["review"]
+
+        for field, user_input in request.form.items():
+            check_length(field, user_input)
+
         reviews.edit_review(artist_name, album_name, genre, stars, review, review_id)
         return redirect(f"/review/{str(review_id)}")
 

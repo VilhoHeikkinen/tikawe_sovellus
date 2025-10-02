@@ -10,22 +10,23 @@
   <form action="/edit/{{ review.id }}" method="post">
     <p>
       Artisti: <br />
-      <input type="text" name="artist" value="{{ review.artist }}" />
+      <input type="text" name="artist" value="{{ review.artist }}" maxlength="50" required />
     </p>
     <p>
       Albumin tai kappaleen nimi: <br />
-      <input type="text" name="album_name" value="{{ review.album_name }}" />
+      <input type="text" name="album_name" value="{{ review.album_name }} "maxlength="50" required  />
     </p>
     <p>
       Genre: <br />
-      <input type="text" name="genre" value="{{ review.genre }}" />
+      <input type="text" name="genre" value="{{ review.genre }}" maxlength="40" required />
     </p>
     <p>
-      Tähtiä: <input type="text" name="stars" rows="1" cols="1" value="{{ review.stars }}" />/5
+      Tähtiä: <input type="text" name="stars" value="{{ review.stars }}" 
+               maxlength="3" pattern="^(?:[0-4](?:[.,]\d)?|5(?:\.0)?)$" required />/5
     </p>
     <p>
       Arvio: <br />
-      <textarea name="review" rows="5" cols="40">{{ review.review }}</textarea>
+      <textarea name="review" rows="10" cols="60" maxlength="3000" required>{{ review.review }}</textarea>
     </p>
     <input type="submit" value="Valmis" />
   </form>
