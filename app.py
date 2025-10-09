@@ -5,6 +5,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import db
 import config
 import reviews
+import users
 import maxlengths
 import re
 
@@ -124,6 +125,15 @@ def search_reviews():
         query = ""
         searched_reviews = ""
     return render_template("/search_reviews.html", reviews=searched_reviews, query=query)
+
+@app.route("/user/<int:user_id>")
+def view_user(user_id):
+    user = users.get_user(user_id)
+    if not user:
+        abort(404)
+
+    user_reviews = users.get_reviews(user_id)
+    return render_template("view_user.html", user=user, reviews=user_reviews)
 
 @app.route("/register")
 def register():
