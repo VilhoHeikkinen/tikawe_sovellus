@@ -16,20 +16,30 @@
       Albumin tai kappaleen nimi: <br />
       <input type="text" name="album_name" value="{{ review.album_name }} "maxlength="50" required  />
     </p>
-    <p>
-      Genre: <br />
-      <select name="genre">
-        <option value="">--</option>
-      {% for genre in genres %}
-        <option value="{{ genre.genre }}"
-         {% if genre.genre == classes.genre %}selected{% endif %}>
-         {{ genre.genre }}</option>
-      {% endfor %}
-      </select>
-    </p>
+    {% for class in all_classes %}
+      <p>
+        Valitse {{ class }}: <br />
+          <select name="classes">
+            <option value="">--</option>
+          {% for option in all_classes[class] %}
+            <option value="{{ class }}:{{ option }}"
+            {% if review_classes[class] == option %}selected{% endif %}>{{ option }}
+            </option>
+          {% endfor %}
+        </select>
+      </p>
+      {% if class == "genre" %}
+        <p>
+          Tai lisää uusi genre <button type="button" 
+          title="Jos et löydä sopivaa genreä, niin voit kirjoittaa haluamasi tähän, ja se myöskin lisätään systeemiin">?
+          </button>: <br />
+          <input type="text" name="addgenre" maxlength="30" />
+          </p>
+      {% endif %}
+    {% endfor %}
     <p>
       Julkaisuvuosi: <br />
-      <input type="number" name="year" value="{{ classes.julkaisuvuosi }}" min="1500" max="2025" required />
+      <input type="number" name="year" value="{{ review.year }}" min="1500" max="2025" required />
     </p>
     <p>
       Tähtiä: <input type="text" name="stars" value="{{ review.stars }}" 

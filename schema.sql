@@ -9,6 +9,7 @@ CREATE TABLE reviews (
     artist TEXT,
     album_name TEXT,
     stars FLOAT,
+    year INTEGER,
     review TEXT,
     user_id INTEGER REFERENCES users
 );
@@ -20,7 +21,8 @@ CREATE TABLE review_classes (
     value TEXT
 );
 
-CREATE TABLE genres (
+CREATE TABLE classes (
     id INTEGER PRIMARY KEY,
-    genre TEXT
+    title TEXT,
+    value TEXT
 );

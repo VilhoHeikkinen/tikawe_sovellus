@@ -20,10 +20,12 @@ def check_id(id):
 
     if id != session_id:
         abort(403)
-        
+
 def check_length(field, user_input):
     maxlength = maxlengths.map[field]
-    if len(user_input) == 0 or len(user_input) > maxlength:
+    if not maxlength:
+        return
+    if len(user_input) > maxlength:
         abort(403)
 
 @app.route("/")
@@ -34,8 +36,8 @@ def index():
 @app.route("/new_review")
 def new_review():
     check_login()
-    genres = reviews.get_all_genres()
-    return render_template("/new_review.html", genres=genres)
+    classes = reviews.get_all_classes()
+    return render_template("/new_review.html", classes=classes)
 
 @app.route("/create_review", methods=["POST"])
 def create_review():
@@ -47,21 +49,27 @@ def create_review():
     # and a comma or a dot is used
     if not re.search("^(?:[0-4](?:[.,]\d)?|5(?:\.0)?)$", stars):
         abort(403)
-
+    publishing_year = request.form["year"]
     review = request.form["review"]
 
     for field, user_input in request.form.items():
-        if field == "year":
-            continue
         check_length(field, user_input)
 
     classes = []
-    genre = request.form["genre"]
-    classes.append(("genre", genre))
-    publishing_year = request.form["year"]
-    classes.append(("julkaisuvuosi", publishing_year))
+    addgenre = request.form.get("addgenre", "").strip()
+    if addgenre:
+        reviews.add_genre(addgenre)
+        classes.append(("genre", addgenre))
+    for item in request.form.getlist("classes"):
+        if item:
+            parts = item.split(":")
+            if addgenre and parts[0] == "genre":
+                continue
+            classes.append((parts[0], parts[1]))
+    print(classes)
 
-    reviews.add_review(artist_name, album_name, stars, review, classes, session["user_id"])
+    reviews.add_review(artist_name, album_name, stars, publishing_year,
+                       review, classes, session["user_id"])
 
     return redirect("/")
 
@@ -71,14 +79,13 @@ def view_review(review_id):
     if not review:
         abort(404)
     classes = reviews.get_classes(review_id)
-    print(classes)
     return render_template("view_review.html", review=review, classes=classes)
 
 @app.route("/edit/<int:review_id>", methods=["GET", "POST"])
 def edit_review(review_id):
     review = reviews.get_review(review_id)
-    classes = reviews.get_classes(review_id)
-    genres = reviews.get_all_genres()
+    review_classes = reviews.get_classes(review_id)
+    all_classes = reviews.get_all_classes()
 
     if not review:
         abort(404)
@@ -86,32 +93,38 @@ def edit_review(review_id):
     check_id(review["user_id"])
 
     if request.method == "GET":
-        return render_template("edit_review.html", review=review, genres=genres, classes=classes)
+        return render_template("edit_review.html", review=review, review_classes=review_classes,
+                               all_classes=all_classes)
 
     if request.method == "POST":
         artist_name = request.form["artist"]
         album_name = request.form["album_name"]
         stars = request.form["stars"]
-
         # Check if stars is a number in between 0 and 5 with max one decimal place
         # and a comma or a dot is used
         if not re.search("^(?:[0-4](?:[.,]\d)?|5(?:\.0)?)$", stars):
             abort(403)
-
+        publishing_year = request.form["year"]
         review = request.form["review"]
 
         for field, user_input in request.form.items():
-            if field == "year":
-                continue
             check_length(field, user_input)
 
         classes = []
-        genre = request.form["genre"]
-        classes.append(("genre", genre))
-        publishing_year = request.form["year"]
-        classes.append(("julkaisuvuosi", publishing_year))
+        addgenre = request.form.get("addgenre", "").strip()
+        if addgenre:
+            reviews.add_genre(addgenre)
+            classes.append(("genre", addgenre))
+        for item in request.form.getlist("classes"):
+            if item:
+                parts = item.split(":")
+                if addgenre and parts[0] == "genre":
+                    continue
+                classes.append((parts[0], parts[1]))
+        print(classes)
 
-        reviews.edit_review(artist_name, album_name, stars, review, review_id, classes)
+        reviews.edit_review(artist_name, album_name, stars, publishing_year,
+                            review, review_id, classes)
         return redirect(f"/review/{str(review_id)}")
 
 @app.route("/remove/<int:review_id>", methods=["GET", "POST"])

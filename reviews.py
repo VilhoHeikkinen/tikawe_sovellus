@@ -1,15 +1,9 @@
 import db
 
-def get_all_genres():
-    sql = "SELECT genre FROM genres ORDER BY genre"
-    genres = db.query(sql)
-
-    return genres
-
-def add_review(artist_name, album_name, stars, review, classes, user_id):
-    sql = """INSERT INTO reviews (artist, album_name, stars, review, user_id)
-             VALUES (?, ?, ?, ?, ?)"""
-    db.execute(sql, [artist_name, album_name, stars, review, user_id])
+def add_review(artist_name, album_name, stars, publishing_year, review, classes, user_id):
+    sql = """INSERT INTO reviews (artist, album_name, stars, year, review, user_id)
+             VALUES (?, ?, ?, ?, ?, ?)"""
+    db.execute(sql, [artist_name, album_name, stars, publishing_year, review, user_id])
 
     review_id = db.last_insert_id()
 
@@ -26,6 +20,7 @@ def get_review(review_id):
                     reviews.artist, 
                     reviews.album_name, 
                     reviews.stars,
+                    reviews.year,
                     reviews.review,
                     reviews.user_id,
                     users.username
@@ -35,20 +30,14 @@ def get_review(review_id):
     result = db.query(sql, [review_id])
     return result[0] if result else None
 
-def get_classes(review_id):
-    sql = "SELECT title, value FROM review_classes WHERE review_id = ?"
-    result = db.query(sql, [review_id])
-    if not result:
-        return {}
-    return {row["title"]: row["value"] for row in result}
-
-def edit_review(artist_name, album_name, stars, review, review_id, classes):
+def edit_review(artist_name, album_name, stars, publishing_year, review, review_id, classes):
     sql = """UPDATE reviews SET artist = ?,
                                 album_name = ?,
                                 stars = ?,
+                                year = ?,
                                 review = ?
              WHERE id = ?"""
-    db.execute(sql, [artist_name, album_name, stars, review, review_id])
+    db.execute(sql, [artist_name, album_name, stars, publishing_year, review, review_id])
 
     sql = """UPDATE review_classes SET value = ?
              WHERE title = ?
@@ -57,6 +46,8 @@ def edit_review(artist_name, album_name, stars, review, review_id, classes):
         db.execute(sql, [value, title, review_id])
 
 def delete_review(review_id):
+    sql = "DELETE FROM review_classes WHERE review_id = ?"
+    db.execute(sql, [review_id])
     sql = "DELETE FROM reviews WHERE id = ?"
     db.execute(sql, [review_id])
 
@@ -66,3 +57,23 @@ def search(query):
              WHERE album_name LIKE ?
              ORDER BY id DESC"""
     return db.query(sql, ["%" + query + "%"])
+
+def get_classes(review_id):
+    sql = "SELECT title, value FROM review_classes WHERE review_id = ?"
+    result = db.query(sql, [review_id])
+    return {row["title"]: row["value"] for row in result}
+
+def get_all_classes():
+    sql = "SELECT title, value FROM classes ORDER BY value"
+    result = db.query(sql)
+
+    classes = {}
+    for title, value in result:
+        classes[title] = []
+    for title, value in result:
+        classes[title].append(value)
+    return classes
+
+def add_genre(genre):
+    sql = "INSERT INTO classes (title, value) VALUES (?, ?);"
+    db.execute(sql, ["genre", genre])

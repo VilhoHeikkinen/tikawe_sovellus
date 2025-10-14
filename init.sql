@@ -1,8 +1,10 @@
-DELETE FROM genres;
+DELETE FROM classes;
 
-INSERT INTO genres (genre) VALUES ('Pop');
-INSERT INTO genres (genre) VALUES ('Rock');
-INSERT INTO genres (genre) VALUES ('Hip Hop/Rap');
-INSERT INTO genres (genre) VALUES ('EDM');
-INSERT INTO genres (genre) VALUES ('Jazz');
+INSERT INTO classes (title, value) VALUES ('genre', 'EDM');
+INSERT INTO classes (title, value) VALUES ('genre', 'Hip Hop/Rap');
+INSERT INTO classes (title, value) VALUES ('genre', 'Jazz');
+INSERT INTO classes (title, value) VALUES ('genre', 'Pop');
+INSERT INTO classes (title, value) VALUES ('genre', 'Rock');
 
+INSERT INTO classes (title, value) VALUES ('tyyppi', 'albumi');
+INSERT INTO classes (title, value) VALUES ('tyyppi', 'kappale');

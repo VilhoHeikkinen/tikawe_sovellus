@@ -15,15 +15,25 @@
       Albumin tai kappaleen nimi: <br />
       <input type="text" name="album_name" maxlength="50" required />
     </p>
-    <p>
-      Genre: <br />
-      <select name="genre">
-        <option value="">--</option>
-      {% for genre in genres %}
-        <option value="{{ genre.genre }}">{{ genre.genre }}</option>
-      {% endfor %}
-      </select>
-    </p>
+    {% for class in classes %}
+      <p>
+        Valitse {{ class }}: <br />
+          <select name="classes">
+            <option value="">--</option>
+          {% for option in classes[class] %}
+            <option value="{{ class }}:{{ option }}">{{ option }}</option>
+          {% endfor %}
+        </select>
+      </p>
+      {% if class == "genre" %}
+        <p>
+          Tai lisää uusi genre <button type="button" 
+          title="Jos et löydä sopivaa genreä, niin voit kirjoittaa haluamasi tähän, ja se myöskin lisätään systeemiin">?
+          </button>: <br />
+          <input type="text" name="addgenre" maxlength="30" />
+          </p>
+      {% endif %}
+    {% endfor %}
     <p>
       Julkaisuvuosi: <br />
       <input type="number" name="year" min="1500" max="2025" required />
