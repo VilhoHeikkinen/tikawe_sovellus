@@ -55,6 +55,8 @@ def create_review():
     for field, user_input in request.form.items():
         check_length(field, user_input)
 
+    all_classes = reviews.get_all_classes()
+
     classes = []
     addgenre = request.form.get("addgenre", "").strip()
     if addgenre:
@@ -65,6 +67,10 @@ def create_review():
             parts = item.split(":")
             if addgenre and parts[0] == "genre":
                 continue
+            if parts[0] not in all_classes:
+                abort(403)
+            if parts[1] not in all_classes[parts[0]]:
+                abort(403)
             classes.append((parts[0], parts[1]))
     print(classes)
 
@@ -120,8 +126,11 @@ def edit_review(review_id):
                 parts = item.split(":")
                 if addgenre and parts[0] == "genre":
                     continue
+                if parts[0] not in all_classes:
+                    abort(403)
+                if parts[1] not in all_classes[parts[0]]:
+                    abort(403)
                 classes.append((parts[0], parts[1]))
-        print(classes)
 
         reviews.edit_review(artist_name, album_name, stars, publishing_year,
                             review, review_id, classes)
