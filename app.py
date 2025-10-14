@@ -41,9 +41,7 @@ def create_review():
     check_login()
     artist_name = request.form["artist"]
     album_name = request.form["album_name"]
-    genre = request.form["genre"]
     stars = request.form["stars"]
-
     # Check if stars is a number in between 0 and 5 with max one decimal place
     # and a comma or a dot is used
     if not re.search("^(?:[0-4](?:[.,]\d)?|5(?:\.0)?)$", stars):
@@ -52,9 +50,17 @@ def create_review():
     review = request.form["review"]
 
     for field, user_input in request.form.items():
+        if field == "year":
+            continue
         check_length(field, user_input)
 
-    reviews.add_review(artist_name, album_name, genre, stars, review, session["user_id"])
+    classes = []
+    genre = request.form["genre"]
+    classes.append(("Genre", genre))
+    publishing_year = request.form["year"]
+    classes.append(("Julkaisuvuosi", publishing_year))
+
+    reviews.add_review(artist_name, album_name, stars, review, classes, session["user_id"])
 
     return redirect("/")
 
@@ -63,11 +69,13 @@ def view_review(review_id):
     review = reviews.get_review(review_id)
     if not review:
         abort(404)
-    return render_template("view_review.html", review=review)
+    classes = reviews.get_classes(review_id)
+    return render_template("view_review.html", review=review, classes=classes)
 
 @app.route("/edit/<int:review_id>", methods=["GET", "POST"])
 def edit_review(review_id):
     review = reviews.get_review(review_id)
+    classes = reviews.get_classes(review_id)
 
     if not review:
         abort(404)
@@ -75,12 +83,11 @@ def edit_review(review_id):
     check_id(review["user_id"])
 
     if request.method == "GET":
-        return render_template("edit_review.html", review=review)
+        return render_template("edit_review.html", review=review, classes=classes)
 
     if request.method == "POST":
         artist_name = request.form["artist"]
         album_name = request.form["album_name"]
-        genre = request.form["genre"]
         stars = request.form["stars"]
 
         # Check if stars is a number in between 0 and 5 with max one decimal place
@@ -91,9 +98,17 @@ def edit_review(review_id):
         review = request.form["review"]
 
         for field, user_input in request.form.items():
+            if field == "year":
+                continue
             check_length(field, user_input)
 
-        reviews.edit_review(artist_name, album_name, genre, stars, review, review_id)
+        classes = []
+        genre = request.form["genre"]
+        classes.append(("Genre", genre))
+        publishing_year = request.form["year"]
+        classes.append(("Julkaisuvuosi", publishing_year))
+
+        reviews.edit_review(artist_name, album_name, stars, review, review_id, classes)
         return redirect(f"/review/{str(review_id)}")
 
 @app.route("/remove/<int:review_id>", methods=["GET", "POST"])

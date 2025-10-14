@@ -17,7 +17,18 @@
     </p>
     <p>
       Genre: <br />
-      <input type="text" name="genre" maxlength="40" required />
+      <select name="genre">
+        <option value="">--</option>
+        <option value="Pop">Pop</option>
+        <option value="Rock">Rock</option>
+        <option value="HipHop/Rap">Hip Hop</option>
+        <option value="EDM">EDM</option>
+        <option value="Jazz">Jazz</option>
+      </select>
+    </p>
+    <p>
+      Julkaisuvuosi: <br />
+      <input type="number" name="year" min="1500" max="2025" required />
     </p>
     <p>
       Tähtiä: <input type="text" name="stars" maxlength="3" 
