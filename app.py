@@ -34,7 +34,8 @@ def index():
 @app.route("/new_review")
 def new_review():
     check_login()
-    return render_template("/new_review.html")
+    genres = reviews.get_all_genres()
+    return render_template("/new_review.html", genres=genres)
 
 @app.route("/create_review", methods=["POST"])
 def create_review():
@@ -56,9 +57,9 @@ def create_review():
 
     classes = []
     genre = request.form["genre"]
-    classes.append(("Genre", genre))
+    classes.append(("genre", genre))
     publishing_year = request.form["year"]
-    classes.append(("Julkaisuvuosi", publishing_year))
+    classes.append(("julkaisuvuosi", publishing_year))
 
     reviews.add_review(artist_name, album_name, stars, review, classes, session["user_id"])
 
@@ -70,12 +71,14 @@ def view_review(review_id):
     if not review:
         abort(404)
     classes = reviews.get_classes(review_id)
+    print(classes)
     return render_template("view_review.html", review=review, classes=classes)
 
 @app.route("/edit/<int:review_id>", methods=["GET", "POST"])
 def edit_review(review_id):
     review = reviews.get_review(review_id)
     classes = reviews.get_classes(review_id)
+    genres = reviews.get_all_genres()
 
     if not review:
         abort(404)
@@ -83,7 +86,7 @@ def edit_review(review_id):
     check_id(review["user_id"])
 
     if request.method == "GET":
-        return render_template("edit_review.html", review=review, classes=classes)
+        return render_template("edit_review.html", review=review, genres=genres, classes=classes)
 
     if request.method == "POST":
         artist_name = request.form["artist"]
@@ -104,9 +107,9 @@ def edit_review(review_id):
 
         classes = []
         genre = request.form["genre"]
-        classes.append(("Genre", genre))
+        classes.append(("genre", genre))
         publishing_year = request.form["year"]
-        classes.append(("Julkaisuvuosi", publishing_year))
+        classes.append(("julkaisuvuosi", publishing_year))
 
         reviews.edit_review(artist_name, album_name, stars, review, review_id, classes)
         return redirect(f"/review/{str(review_id)}")

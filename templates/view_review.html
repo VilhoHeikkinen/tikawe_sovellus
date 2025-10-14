@@ -8,9 +8,7 @@
 <body>
   <h1>Käyttäjältä <a href="/user/{{ review.user_id }}">{{ review.username }}</a></h1>
   <h1>{{ review.album_name }}, {{ review.artist }}</h1>
-  {% for c in classes %}
-    {{ c.title }}: {{ c.value }}<br />
-  {% endfor %}
+  Genre: {{ classes.genre }}<br />
   <p>
     {{ review.stars }}/5 tähteä
   </p>

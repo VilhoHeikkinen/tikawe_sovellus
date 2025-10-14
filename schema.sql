@@ -19,3 +19,8 @@ CREATE TABLE review_classes (
     title TEXT,
     value TEXT
 );
+
+CREATE TABLE genres (
+    id INTEGER PRIMARY KEY,
+    genre TEXT
+);

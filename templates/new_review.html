@@ -19,11 +19,9 @@
       Genre: <br />
       <select name="genre">
         <option value="">--</option>
-        <option value="Pop">Pop</option>
-        <option value="Rock">Rock</option>
-        <option value="HipHop/Rap">Hip Hop</option>
-        <option value="EDM">EDM</option>
-        <option value="Jazz">Jazz</option>
+      {% for genre in genres %}
+        <option value="{{ genre.genre }}">{{ genre.genre }}</option>
+      {% endfor %}
       </select>
     </p>
     <p>
