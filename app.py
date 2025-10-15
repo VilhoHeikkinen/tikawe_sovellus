@@ -154,7 +154,7 @@ def remove_review(review_id):
             return redirect("/")
         if "cancel" in request.form:
             return redirect(f"/review/{str(review_id)}")
-  
+
 @app.route("/search_reviews")
 def search_reviews():
     query = request.args.get("query")

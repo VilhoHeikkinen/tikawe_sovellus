@@ -20,7 +20,6 @@
       <p>
         Valitse {{ class }}: <br />
           <select name="classes">
-            <option value="">--</option>
           {% for option in all_classes[class] %}
             <option value="{{ class }}:{{ option }}"
             {% if review_classes[class] == option %}selected{% endif %}>{{ option }}
