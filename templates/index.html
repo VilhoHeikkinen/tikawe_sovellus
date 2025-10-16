@@ -30,9 +30,20 @@
   <h2>Arvostelut</h2>
   <form action="/search_reviews" method="get">
     <p>
-      Etsi arvostelua teoksen nimellä: <input type="text" name="query" value="{{ query }}"> <br />
+      Etsi arvostelua: <input type="text" name="query" value="{{ query }}"> <br />
       <input type="submit" value="Etsi">
     </p>
+    {% for class in classes %}
+      <p>
+        Valitse {{ class }}: <br />
+          <select name="classes">
+            <option value="">--</option>
+          {% for option in classes[class] %}
+            <option value="{{ class }}:{{ option }}">{{ option }}</option>
+          {% endfor %}
+        </select>
+      </p>
+    {% endfor %}
   </form>
   {% for review in reviews %}
     <a href="/review/{{ review.id }}">{{ review.artist }}, {{ review.album_name }}, 

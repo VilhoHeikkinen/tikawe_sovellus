@@ -32,7 +32,8 @@ def check_length(field, user_input):
 @app.route("/")
 def index():
     recent_reviews = reviews.get_reviews()
-    return render_template("/index.html", reviews = recent_reviews)
+    classes = reviews.get_all_classes()
+    return render_template("/index.html", reviews=recent_reviews, classes=classes)
 
 @app.route("/new_review")
 def new_review():
@@ -192,12 +193,18 @@ def remove_review(review_id):
 @app.route("/search_reviews")
 def search_reviews():
     query = request.args.get("query")
+    classes = []
+    for item in request.args.getlist("classes"):
+        if item:
+            parts = item.split(":")
+            classes.append((parts[0], parts[1]))
     if query:
-        searched_reviews = reviews.search(query)
+        searched_reviews = reviews.search(query, classes)
     else:
         query = ""
         searched_reviews = ""
-    return render_template("/search_reviews.html", reviews=searched_reviews, query=query)
+    return render_template("/search_reviews.html", reviews=searched_reviews,
+                           query=query, classes=classes)
 
 @app.route("/user/<int:user_id>")
 def view_user(user_id):
