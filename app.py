@@ -5,6 +5,7 @@ import db
 import config
 import reviews
 import users
+import releases
 import maxlengths
 import re
 
@@ -80,12 +81,11 @@ def create_review():
                 release_type = parts[1]
             classes.append((parts[0], parts[1]))
 
-    reviews.add_release(normalised_album, normalised_artist, release_type)
-    release_id = reviews.get_release_id(normalised_album, normalised_artist, release_type)
-    print(type(release_id))
+    releases.add_release(normalised_album, normalised_artist, release_type)
+    release_id = releases.get_release_id(normalised_album, normalised_artist, release_type)
     reviews.add_review(normalised_artist, normalised_album, stars, publishing_year,
                        review, session["user_id"], release_id, classes)
-    reviews.add_stars_avg(normalised_album, normalised_artist, release_type)
+    releases.add_stars_avg(normalised_album, normalised_artist, release_type)
 
     return redirect("/")
 
@@ -150,11 +150,11 @@ def edit_review(review_id):
                 classes.append((parts[0], parts[1]))
 
         # reviews.add_release only adds the release if it isn't in the table
-        reviews.add_release(normalised_album, normalised_artist, release_type)
-        release_id = reviews.get_release_id(normalised_album, normalised_artist, release_type)
+        releases.add_release(normalised_album, normalised_artist, release_type)
+        release_id = releases.get_release_id(normalised_album, normalised_artist, release_type)
         reviews.edit_review(normalised_artist, normalised_album, stars, publishing_year,
                             form_review, review_id, release_id, classes)
-        reviews.add_stars_avg(normalised_album, normalised_artist, release_type)
+        releases.add_stars_avg(normalised_album, normalised_artist, release_type)
 
         # If release title or artist name changed, and the old release doesn't have any
         # more reviews, delete the old release
@@ -162,9 +162,7 @@ def edit_review(review_id):
         old_artist = review["artist"]
         if normalised_album != old_title or normalised_artist != old_artist:
             old_release_id = review["release_id"]
-            release_reviews = reviews.get_release_reviews(old_release_id)
-            if not release_reviews:
-                reviews.delete_release(old_release_id)
+            releases.delete_releases_without_reviews(old_release_id)
 
         return redirect(f"/review/{str(review_id)}")
 
@@ -183,6 +181,8 @@ def remove_review(review_id):
     if request.method == "POST":
         if "continue" in request.form:
             reviews.delete_review(review_id)
+            release_id = review["release_id"]
+            releases.delete_release(release_id)
             return redirect("/")
         if "cancel" in request.form:
             return redirect(f"/review/{str(review_id)}")
@@ -208,14 +208,14 @@ def view_user(user_id):
 
 @app.route("/view_releases")
 def view_releases():
-    releases = reviews.get_releases()
-    return render_template("/view_releases.html", releases=releases)
+    all_releases = releases.get_releases()
+    return render_template("/view_releases.html", releases=all_releases)
 
 @app.route("/release/<int:release_id>")
 def view_release(release_id):
-    release = reviews.get_release(release_id)
+    release = releases.get_release(release_id)
     print(release)
-    release_reviews = reviews.get_release_reviews(release_id)
+    release_reviews = releases.get_release_reviews(release_id)
     if not release:
         abort(404)
     return render_template("view_release.html", release=release, reviews=release_reviews)
