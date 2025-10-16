@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>{{ release.title }}</title>
+</head>
+  <h1>{{ release.title }}, {{ release.artist }}</h1>
+<body>
+  <p>
+  ({{ release.type }})
+  </p>
+  <h2>Julkaisuun liittyvät arvostelut</h2>
+  {% for review in reviews %}
+    <a href="/review/{{ review.id }}">{{ review.artist }}, {{ review.album_name }}, 
+      tähtiä {{ review.stars }}/5</a> <br / >
+  {% endfor %}
+</body>
+
+</html>

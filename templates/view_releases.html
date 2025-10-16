@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Arvostellut julkaisut</title>
+</head>
+  <h1>Arvostellut julkaisut</h1>
+<body>
+  {% for release in releases %}
+    <a href="/release/{{ release.id }}">{{ release.title }} ({{ release.type }}), {{ release.artist }}, 
+      tähtiä {{ release.stars_avg }}/5</a> <br / >
+  {% endfor %}
+</body>
+
+</html>

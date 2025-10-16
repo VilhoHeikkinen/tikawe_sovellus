@@ -79,7 +79,6 @@ def create_review():
             if parts[0] == "tyyppi":
                 release_type = parts[1]
             classes.append((parts[0], parts[1]))
-    print(classes)
 
     reviews.add_release(normalised_album, normalised_artist, release_type)
     release_id = reviews.get_release_id(normalised_album, normalised_artist, release_type)
@@ -184,6 +183,20 @@ def view_user(user_id):
 
     user_reviews = users.get_reviews(user_id)
     return render_template("view_user.html", user=user, reviews=user_reviews)
+
+@app.route("/view_releases")
+def view_releases():
+    releases = reviews.get_releases()
+    return render_template("/view_releases.html", releases=releases)
+
+@app.route("/release/<int:release_id>")
+def view_release(release_id):
+    release = reviews.get_release(release_id)
+    print(release)
+    release_reviews = reviews.get_release_reviews(release_id)
+    if not release:
+        abort(404)
+    return render_template("view_release.html", release=release, reviews=release_reviews)
 
 @app.route("/register")
 def register():
