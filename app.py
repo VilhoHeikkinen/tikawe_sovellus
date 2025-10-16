@@ -85,7 +85,7 @@ def create_review():
     release_id = releases.get_release_id(normalised_album, normalised_artist, release_type)
     reviews.add_review(normalised_artist, normalised_album, stars, publishing_year,
                        review, session["user_id"], release_id, classes)
-    releases.add_stars_avg(normalised_album, normalised_artist, release_type)
+    releases.update_stars_avg(release_id)
 
     return redirect("/")
 
@@ -154,15 +154,15 @@ def edit_review(review_id):
         release_id = releases.get_release_id(normalised_album, normalised_artist, release_type)
         reviews.edit_review(normalised_artist, normalised_album, stars, publishing_year,
                             form_review, review_id, release_id, classes)
-        releases.add_stars_avg(normalised_album, normalised_artist, release_type)
+        releases.update_stars_avg(release_id)
 
-        # If release title or artist name changed, and the old release doesn't have any
+        # If release_id changed, and the old release doesn't have any
         # more reviews, delete the old release
-        old_title = review["album_name"]
-        old_artist = review["artist"]
-        if normalised_album != old_title or normalised_artist != old_artist:
-            old_release_id = review["release_id"]
+        old_release_id = review["release_id"]
+        if release_id != old_release_id:
             releases.delete_releases_without_reviews(old_release_id)
+            # If the release still has reviews, update stars avg, otherwise this does nothing
+            releases.update_stars_avg(old_release_id)
 
         return redirect(f"/review/{str(review_id)}")
 
@@ -182,7 +182,9 @@ def remove_review(review_id):
         if "continue" in request.form:
             reviews.delete_review(review_id)
             release_id = review["release_id"]
-            releases.delete_release(release_id)
+            # Only delete release if it doesn't have any reviews after deleting one of them
+            releases.delete_releases_without_reviews(release_id)
+            releases.update_stars_avg(release_id)
             return redirect("/")
         if "cancel" in request.form:
             return redirect(f"/review/{str(review_id)}")
