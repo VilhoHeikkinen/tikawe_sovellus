@@ -44,6 +44,10 @@ def create_review():
     check_login()
     artist_name = request.form["artist"]
     album_name = request.form["album_name"]
+    # Normalise artist_name and album_name
+    normalised_artist = artist_name.strip().title()
+    normalised_album = album_name.strip().title()
+
     stars = request.form["stars"]
     # Check if stars is a number in between 0 and 5 with max one decimal place
     # and a comma or a dot is used
@@ -58,6 +62,7 @@ def create_review():
     all_classes = reviews.get_all_classes()
 
     classes = []
+    release_type = "NULL"
     addgenre = request.form.get("addgenre", "").strip()
     if addgenre:
         reviews.add_genre(addgenre)
@@ -71,11 +76,17 @@ def create_review():
                 abort(403)
             if parts[1] not in all_classes[parts[0]]:
                 abort(403)
+            if parts[0] == "tyyppi":
+                release_type = parts[1]
             classes.append((parts[0], parts[1]))
     print(classes)
 
-    reviews.add_review(artist_name, album_name, stars, publishing_year,
-                       review, classes, session["user_id"])
+    reviews.add_release(normalised_album, normalised_artist, release_type)
+    release_id = reviews.get_release_id(normalised_album, normalised_artist, release_type)
+    print(type(release_id))
+    reviews.add_review(normalised_artist, normalised_album, stars, publishing_year,
+                       review, session["user_id"], release_id, classes)
+    reviews.add_stars_avg(normalised_album, normalised_artist, release_type)
 
     return redirect("/")
 

@@ -11,7 +11,8 @@ CREATE TABLE reviews (
     stars FLOAT,
     year INTEGER,
     review TEXT,
-    user_id INTEGER REFERENCES users
+    user_id INTEGER REFERENCES users,
+    release_id INTEGER REFERENCES releases
 );
 
 CREATE TABLE review_classes (
@@ -25,4 +26,12 @@ CREATE TABLE classes (
     id INTEGER PRIMARY KEY,
     title TEXT,
     value TEXT
+);
+
+CREATE TABLE releases (
+    id INTEGER PRIMARY KEY,
+    title TEXT,
+    artist TEXT,
+    type TEXT,
+    stars_avg FLOAT
 );
