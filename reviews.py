@@ -23,6 +23,7 @@ def get_review(review_id):
                     reviews.year,
                     reviews.review,
                     reviews.user_id,
+                    reviews.release_id,
                     users.username
              FROM reviews, users 
              WHERE reviews.user_id = users.id
@@ -37,14 +38,15 @@ def get_release_reviews(release_id):
              ORDER BY id DESC"""
     return db.query(sql, [release_id])
 
-def edit_review(artist_name, album_name, stars, publishing_year, review, review_id, classes):
+def edit_review(artist_name, album_name, stars, publishing_year, review, review_id, release_id, classes):
     sql = """UPDATE reviews SET artist = ?,
                                 album_name = ?,
                                 stars = ?,
                                 year = ?,
-                                review = ?
+                                review = ?,
+                                release_id = ?
              WHERE id = ?"""
-    db.execute(sql, [artist_name, album_name, stars, publishing_year, review, review_id])
+    db.execute(sql, [artist_name, album_name, stars, publishing_year, review, release_id, review_id])
 
     sql = """UPDATE review_classes SET value = ?
              WHERE title = ?
@@ -119,3 +121,7 @@ def get_release(release_id):
              WHERE id = ?"""
     result = db.query(sql, [release_id])
     return result[0] if result else None
+
+def delete_release(release_id):
+    sql = "DELETE FROM releases WHERE id = ?"
+    db.execute(sql, [release_id])

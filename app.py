@@ -115,18 +115,23 @@ def edit_review(review_id):
     if request.method == "POST":
         artist_name = request.form["artist"]
         album_name = request.form["album_name"]
+        # Normalise artist_name and album_name
+        normalised_artist = artist_name.strip().title()
+        normalised_album = album_name.strip().title()
+
         stars = request.form["stars"]
         # Check if stars is a number in between 0 and 5 with max one decimal place
         # and a comma or a dot is used
         if not re.search("^(?:[0-4](?:[.,]\d)?|5(?:\.0)?)$", stars):
             abort(403)
         publishing_year = request.form["year"]
-        review = request.form["review"]
+        form_review = request.form["review"]
 
         for field, user_input in request.form.items():
             check_length(field, user_input)
 
         classes = []
+        release_type = "NULL"
         addgenre = request.form.get("addgenre", "").strip()
         if addgenre:
             reviews.add_genre(addgenre)
@@ -140,10 +145,27 @@ def edit_review(review_id):
                     abort(403)
                 if parts[1] not in all_classes[parts[0]]:
                     abort(403)
+                if parts[0] == "tyyppi":
+                    release_type = parts[1]
                 classes.append((parts[0], parts[1]))
 
-        reviews.edit_review(artist_name, album_name, stars, publishing_year,
-                            review, review_id, classes)
+        # reviews.add_release only adds the release if it isn't in the table
+        reviews.add_release(normalised_album, normalised_artist, release_type)
+        release_id = reviews.get_release_id(normalised_album, normalised_artist, release_type)
+        reviews.edit_review(normalised_artist, normalised_album, stars, publishing_year,
+                            form_review, review_id, release_id, classes)
+        reviews.add_stars_avg(normalised_album, normalised_artist, release_type)
+
+        # If release title or artist name changed, and the old release doesn't have any
+        # more reviews, delete the old release
+        old_title = review["album_name"]
+        old_artist = review["artist"]
+        if normalised_album != old_title or normalised_artist != old_artist:
+            old_release_id = review["release_id"]
+            release_reviews = reviews.get_release_reviews(old_release_id)
+            if not release_reviews:
+                reviews.delete_release(old_release_id)
+
         return redirect(f"/review/{str(review_id)}")
 
 @app.route("/remove/<int:review_id>", methods=["GET", "POST"])
