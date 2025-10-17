@@ -8,9 +8,11 @@ body {
 
 html {
   background-image: 
-    radial-gradient(rgb(228, 222, 63) 25.6%, transparent 25.6%),
-    radial-gradient(rgb(228, 222, 63) 25.6%, transparent 25.6%);
-  background-position: 0px 0px, 104px 104px;
+    radial-gradient(rgb(228, 222, 63) 32.4%, transparent 32.4%),
+    radial-gradient(rgb(228, 222, 63) 32.4%, transparent 32.4%),
+    radial-gradient(rgb(0, 0, 0) 32.4%, transparent 32.4%),
+    radial-gradient(rgb(0, 0, 0) 32.4%, transparent 32.4%);
+  background-position: 0px 0px, 104px 104px, -10.4px 10.4px, 93.6px 114.4px;
   background-size: 208px 208px;
   background-color: rgb(139, 69, 16);
 }
@@ -30,5 +32,13 @@ html {
   border-bottom: 2px dashed black;
   margin: 1em;
   padding: 0.2em 0.5em;
+  line-height: 1.5;
+}
+
+.longtext {
+  text-align: justify;
+  text-align-last: left;
+  white-space: pre-wrap;
+  border-top: 2px solid black;
   line-height: 1.5;
 }

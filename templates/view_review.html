@@ -21,9 +21,10 @@
 <p>
   {{ review.stars }}/5 tähteä
 </p>
-<p>
+<br />
+<div class="longtext">
   {{ review.review }}
-</p>
+</div>
 
 {% if session.username == review.username %}
 <p>
