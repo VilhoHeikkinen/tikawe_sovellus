@@ -8,6 +8,12 @@
 <body>
   <h1>Käyttäjältä <a href="/user/{{ review.user_id }}">{{ review.username }}</a></h1>
   <h1>{{ review.album_name }}, {{ review.artist }}</h1>
+  {% if review.has_image %}
+    <img src="/image/{{ review.id }}" />
+  {% endif %}
+  <p>
+    Julkaisuvuosi: {{ review.year }}
+  </p>
   {% for class in classes %}
     <p>
     {{ class }}: {{ classes[class] }}

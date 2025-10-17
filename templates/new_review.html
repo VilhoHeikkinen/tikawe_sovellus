@@ -6,7 +6,7 @@
 </head>
 
 <body>
-  <form action="/create_review" method="post">
+  <form action="/create_review" method="post" enctype="multipart/form-data">
     <p>
       Artisti: <br />
       <input type="text" name="artist" maxlength="50" required />
@@ -14,6 +14,10 @@
     <p>
       Albumin tai kappaleen nimi: <br />
       <input type="text" name="album_name" maxlength="50" required />
+    </p>
+    <p>
+      Lisää kuva: <br />
+      <input type="file" name="image" accept=".jpg, .jpeg" />
     </p>
     {% for class in classes %}
       <p>

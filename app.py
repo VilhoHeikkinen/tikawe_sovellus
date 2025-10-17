@@ -1,6 +1,6 @@
 import sqlite3
 from flask import Flask
-from flask import redirect, render_template, request, session, abort
+from flask import redirect, render_template, request, session, abort, make_response
 import db
 import config
 import reviews
@@ -29,6 +29,14 @@ def check_length(field, user_input):
     if len(user_input) > maxlength:
         abort(403)
 
+def get_image_from_file(file):
+    if not (file.filename.endswith(".jpg") or file.filename.endswith(".jpeg")):
+        return "VIRHE: väärä tiedostomuoto"
+    image = file.read()
+    if len(image) > 100 * 1024:
+        return "VIRHE: liian suuri kuva"
+    return image
+
 @app.route("/")
 def index():
     recent_reviews = reviews.get_reviews()
@@ -49,6 +57,9 @@ def create_review():
     # Normalise artist_name and album_name
     normalised_artist = artist_name.strip().title()
     normalised_album = album_name.strip().title()
+
+    file = request.files["image"]
+    image = get_image_from_file(file)
 
     stars = request.form["stars"]
     # Check if stars is a number in between 0 and 5 with max one decimal place
@@ -84,8 +95,15 @@ def create_review():
 
     releases.add_release(normalised_album, normalised_artist, release_type)
     release_id = releases.get_release_id(normalised_album, normalised_artist, release_type)
-    reviews.add_review(normalised_artist, normalised_album, stars, publishing_year,
-                       review, session["user_id"], release_id, classes)
+    reviews.add_review(normalised_artist,
+                       normalised_album,
+                       stars,
+                       publishing_year,
+                       review,
+                       session["user_id"],
+                       release_id,
+                       image,
+                       classes)
     releases.update_stars_avg(release_id)
 
     return redirect("/")
@@ -228,6 +246,16 @@ def view_release(release_id):
     if not release:
         abort(404)
     return render_template("view_release.html", release=release, reviews=release_reviews)
+
+@app.route("/image/<int:review_id>")
+def show_image(review_id):
+    image = reviews.get_image(review_id)
+    if not image:
+        abort(404)
+
+    response = make_response(image)
+    response.headers.set("Content-Type", "image/jpeg")
+    return response
 
 @app.route("/register")
 def register():

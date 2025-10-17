@@ -1,9 +1,11 @@
 import db
 
-def add_review(artist_name, album_name, stars, publishing_year, review, user_id, release_id, classes):
-    sql = """INSERT INTO reviews (artist, album_name, stars, year, review, user_id, release_id)
-             VALUES (?, ?, ?, ?, ?, ?, ?)"""
-    db.execute(sql, [artist_name, album_name, stars, publishing_year, review, user_id, release_id])
+def add_review(artist_name, album_name, stars, publishing_year, review, user_id, release_id, image, classes):
+    sql = """INSERT INTO reviews
+             (artist, album_name, stars, year, review, user_id, release_id, image)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?)"""
+    db.execute(sql, [artist_name, album_name, stars,
+                     publishing_year, review, user_id, release_id, image])
 
     review_id = db.last_insert_id()
 
@@ -19,6 +21,7 @@ def get_review(review_id):
     sql = """SELECT reviews.id,
                     reviews.artist, 
                     reviews.album_name, 
+                    reviews.image IS NOT NULL has_image,
                     reviews.stars,
                     reviews.year,
                     reviews.review,
@@ -39,7 +42,8 @@ def edit_review(artist_name, album_name, stars, publishing_year, review, review_
                                 review = ?,
                                 release_id = ?
              WHERE id = ?"""
-    db.execute(sql, [artist_name, album_name, stars, publishing_year, review, release_id, review_id])
+    db.execute(sql, [artist_name, album_name, stars, publishing_year,
+                     review, release_id, review_id])
 
     sql = """UPDATE review_classes SET value = ?
              WHERE title = ?
@@ -92,3 +96,8 @@ def get_all_classes():
 def add_genre(genre):
     sql = "INSERT INTO classes (title, value) VALUES (?, ?);"
     db.execute(sql, ["genre", genre])
+
+def get_image(review_id):
+    sql = "SELECT image FROM reviews WHERE id = ?"
+    result = db.query(sql, [review_id])
+    return result[0][0] if result else None

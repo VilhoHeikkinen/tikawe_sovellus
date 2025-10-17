@@ -12,7 +12,8 @@ CREATE TABLE reviews (
     year INTEGER,
     review TEXT,
     user_id INTEGER REFERENCES users,
-    release_id INTEGER REFERENCES releases
+    release_id INTEGER REFERENCES releases,
+    image BLOB
 );
 
 CREATE TABLE review_classes (
