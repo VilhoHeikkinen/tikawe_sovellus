@@ -138,6 +138,14 @@ def edit_review(review_id):
         normalised_artist = artist_name.strip().title()
         normalised_album = album_name.strip().title()
 
+        rm_img = request.form.get("rm_img")
+        print(rm_img)
+        if rm_img:
+            image = ""
+        else:
+            file = request.files["image"]
+            image = get_image_from_file(file)
+
         stars = request.form["stars"]
         # Check if stars is a number in between 0 and 5 with max one decimal place
         # and a comma or a dot is used
@@ -171,8 +179,15 @@ def edit_review(review_id):
         # reviews.add_release only adds the release if it isn't in the table
         releases.add_release(normalised_album, normalised_artist, release_type)
         release_id = releases.get_release_id(normalised_album, normalised_artist, release_type)
-        reviews.edit_review(normalised_artist, normalised_album, stars, publishing_year,
-                            form_review, review_id, release_id, classes)
+        reviews.edit_review(normalised_artist,
+                            normalised_album,
+                            stars,
+                            publishing_year,
+                            form_review,
+                            review_id,
+                            release_id,
+                            image,
+                            classes)
         releases.update_stars_avg(release_id)
 
         # If release_id changed, and the old release doesn't have any

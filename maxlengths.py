@@ -9,5 +9,6 @@ map = {
    "genre": None,
    "tyyppi": None,
    "year": None,
-   "classes": None
+   "classes": None,
+   "rm_img": None
 }

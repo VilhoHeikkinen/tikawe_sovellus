@@ -34,16 +34,17 @@ def get_review(review_id):
     result = db.query(sql, [review_id])
     return result[0] if result else None
 
-def edit_review(artist_name, album_name, stars, publishing_year, review, review_id, release_id, classes):
+def edit_review(artist_name, album_name, stars, publishing_year, review, review_id, release_id, image, classes):
     sql = """UPDATE reviews SET artist = ?,
                                 album_name = ?,
                                 stars = ?,
                                 year = ?,
                                 review = ?,
-                                release_id = ?
+                                release_id = ?,
+                                image = ?
              WHERE id = ?"""
     db.execute(sql, [artist_name, album_name, stars, publishing_year,
-                     review, release_id, review_id])
+                     review, release_id, image, review_id])
 
     sql = """UPDATE review_classes SET value = ?
              WHERE title = ?
