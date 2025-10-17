@@ -12,7 +12,10 @@ Käyttäjä {{ user.username }}
   <h3>Ei vielä arvosteluja</h3>
 {% endif %}
 {% for review in reviews %}
-  <a href="/review/{{ review.id }}">{{ review.artist }}, {{ review.album_name }}, 
-    tähtiä {{ review.stars }}/5</a> <br / >
+  <div class="review_desc">
+    <a href="/review/{{ review.id }}">{{ review.album_name }}</a><br />
+    Artisti: {{ review.artist }}<br />
+    Tähtiä: {{ review.stars }}/5<br />
+  </div>
 {% endfor %}
 {% endblock %}
