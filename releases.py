@@ -51,10 +51,6 @@ def get_release(release_id):
     return result[0] if result else None
 
 def get_release_reviews(release_id):
-    sql = """SELECT id, artist, album_name, stars 
-             FROM reviews 
-             WHERE release_id = ?
-             ORDER BY id DESC"""
     sql = """SELECT r.id,
                     r.artist,
                     r.album_name,
