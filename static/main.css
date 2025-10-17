@@ -15,6 +15,10 @@ html {
   background-color: rgb(139, 69, 16);
 }
 
+.layout {
+  border-bottom: 3px solid black;
+}
+
 .review_desc {
   border-bottom: 2px dashed black;
   margin: 1em;

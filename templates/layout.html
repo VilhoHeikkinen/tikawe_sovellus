@@ -7,28 +7,28 @@
 </head>
 
 <body>
-  <h1>Arvostelusovellus</h1>
-  {% if session.username %}
+  <div class="layout">
+    <h1>Arvostelusovellus</h1>
     <p>
-      Olet kirjautunut nimellä {{ session.username }}
+      <a href="/view_releases">Arvostellut julkaisut</a> | 
+      <a href="/search">Hae arvostelua</a> | 
+      {% if session.user_id %}
+        <a href="/new_review">Uusi arvostelu</a> | 
+        <a href="/logout">Kirjaudu ulos</a>
+      {% else %}
+        <a href="/login">Kirjaudu sisään</a> | 
+        <a href="/register">Luo tunnus</a> 
+      {% endif %}
+      {% if request.path != "/" %}
+        | <a href="/">Takaisin etusivulle</a>
     </p>
-  {% endif %}
-  <p>
-    <a href="/view_releases">Arvostellut julkaisut</a> | 
-    <a href="/search">Hae arvostelua</a> | 
-    {% if session.user_id %}
-      <a href="/new_review">Uusi arvostelu</a> | 
-      <a href="/logout">Kirjaudu ulos</a>
-    {% else %}
-      <a href="/login">Kirjaudu sisään</a> | 
-      <a href="/register">Luo tunnus</a>
     {% endif %}
-  </p>
-  {% if request.path != "/" %}
-    <p>
-      <a href="/">Takaisin etusivulle</a>
-    </p>
-  {% endif %}
+    {% if session.username %}
+      <p>
+        Olet kirjautunut nimellä {{ session.username }}
+      </p>
+    {% endif %}
+  </div>
   {% block body %}{% endblock %}
 </body>
 </html>
