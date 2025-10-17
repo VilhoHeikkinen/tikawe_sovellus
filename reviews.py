@@ -14,7 +14,15 @@ def add_review(artist_name, album_name, stars, publishing_year, review, user_id,
         db.execute(sql, [review_id, title, value])
 
 def get_reviews():
-    sql = "SELECT id, artist, album_name, stars FROM reviews ORDER BY id DESC"
+    sql = """SELECT r.id,
+                    r.artist,
+                    r.album_name,
+                    r.stars,
+                    r.user_id,
+                    u.username
+             FROM reviews r, users u
+             WHERE r.user_id = u.id
+             ORDER BY r.id DESC"""
     return db.query(sql)
 
 def get_review(review_id):
