@@ -11,24 +11,23 @@
     <p>
       Olet kirjautunut nimellä {{ session.username }}
     </p>
-    <p>
-      <a href="/logout">Kirjaudu ulos</a>
-    </p>
-
-    <p>
-      <a href="/new_review">Uusi arvostelu</a>
-    </p>
-  {% else %}
-    <p>
-      <a href="/login">Kirjaudu sisään</a> <br />
-      <a href="/register">Luo tunnus</a>
-    </p>
   {% endif %}
   <p>
-    <a href="/view_releases">Arvostellut julkaisut</a>
+    <a href="/view_releases">Arvostellut julkaisut</a> | 
+    <a href="/search">Hae arvostelua</a> | 
+    {% if session.user_id %}
+      <a href="/new_review">Uusi arvostelu</a> | 
+      <a href="/logout">Kirjaudu ulos</a>
+    {% else %}
+      <a href="/login">Kirjaudu sisään</a> | 
+      <a href="/register">Luo tunnus</a>
+    {% endif %}
   </p>
-  <p>
-    <a href="/search">Hae arvostelua</a>
-  </p>
+  {% if request.path != "/" %}
+    <p>
+      <a href="/">Takaisin etusivulle</a>
+    </p>
+  {% endif %}
   {% block body %}{% endblock %}
+</body>
 </html>
