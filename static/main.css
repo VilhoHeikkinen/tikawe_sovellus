@@ -1,9 +1,10 @@
 body {
-  margin: 50px auto 0 auto;
+  margin: 50px auto 50px auto;
   max-width: 50em;
   font-family: sans-serif;
   background-color: bisque;
   padding: 5px 50px 50px 50px;
+  border-radius: 30px;
 }
 
 html {
@@ -23,7 +24,7 @@ html {
 
 .review_desc {
   border-bottom: 2px dashed black;
-  margin: 1em;
+  margin: 0;
   padding: 0.2em 0.5em;
   line-height: 1.5;
 }

@@ -9,10 +9,12 @@ Haku
 {% if reviews %}
   {% for review in reviews %}
     <div class="review_desc">
-      <a href="/review/{{ review.id }}">{{ review.album_name }}</a><br />
-      Artisti: {{ review.artist }}<br />
-      Tähtiä: {{ review.stars }}/5<br />
-      Käyttäjältä <a href="/user/{{ review.user_id }}">{{ review.username }}</a>
+      <p>
+        <a href="/review/{{ review.id }}">{{ review.album_name }}</a><br />
+        Artisti: {{ review.artist }}<br />
+        Tähtiä: {{ review.stars }}/5<br />
+        Käyttäjältä <a href="/user/{{ review.user_id }}">{{ review.username }}</a><br />
+      </p>
     </div>
   {% endfor %}
 {% else %}
