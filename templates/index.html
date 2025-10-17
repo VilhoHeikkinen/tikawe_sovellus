@@ -1,53 +1,30 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>Arvostelusovellus</title>
-</head>
+{% block title %}
+Arvostelusovellus
+{% endblock %}
 
-<body>
-  <h1>Arvostelusovellus</h1>
-  {% if session.username %}
-    <p>
-      Olet kirjautunut nimellä {{ session.username }}
-    </p>
-    <p>
-      <a href="/logout">Kirjaudu ulos</a>
-    </p>
-
-    <p>
-      <a href="/new_review">Uusi arvostelu</a>
-    </p>
-  {% else %}
-    <p>
-      <a href="/login">Kirjaudu sisään</a> <br />
-      <a href="/register">Luo tunnus</a>
-    </p>
-  {% endif %}
+{% block body %}
+<h2>Arvostelut</h2>
+<form action="/search_reviews" method="get">
   <p>
-    <a href="/view_releases">Arvostellut julkaisut</a>
+    Etsi arvostelua: <input type="text" name="query" value="{{ query }}"> <br />
+    <input type="submit" value="Etsi">
   </p>
-  <h2>Arvostelut</h2>
-  <form action="/search_reviews" method="get">
+  {% for class in classes %}
     <p>
-      Etsi arvostelua: <input type="text" name="query" value="{{ query }}"> <br />
-      <input type="submit" value="Etsi">
+      Valitse {{ class }}: <br />
+        <select name="classes">
+          <option value="">--</option>
+        {% for option in classes[class] %}
+          <option value="{{ class }}:{{ option }}">{{ option }}</option>
+        {% endfor %}
+      </select>
     </p>
-    {% for class in classes %}
-      <p>
-        Valitse {{ class }}: <br />
-          <select name="classes">
-            <option value="">--</option>
-          {% for option in classes[class] %}
-            <option value="{{ class }}:{{ option }}">{{ option }}</option>
-          {% endfor %}
-        </select>
-      </p>
-    {% endfor %}
-  </form>
-  {% for review in reviews %}
-    <a href="/review/{{ review.id }}">{{ review.artist }}, {{ review.album_name }}, 
-      tähtiä {{ review.stars }}/5</a> <br / >
   {% endfor %}
-  
-</html>
+</form>
+{% for review in reviews %}
+  <a href="/review/{{ review.id }}">{{ review.artist }}, {{ review.album_name }}, 
+    tähtiä {{ review.stars }}/5</a> <br / >
+{% endfor %}
+{% endblock %}
