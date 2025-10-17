@@ -1,18 +1,30 @@
 body {
-  margin: auto;
+  margin: 50px auto 0 auto;
   max-width: 50em;
   font-family: sans-serif;
-  background-color: lightblue;
+  background-color: bisque;
+  padding: 5px 50px 50px 50px;
+}
+
+html {
+  background-image: 
+    radial-gradient(rgb(228, 222, 63) 25.6%, transparent 25.6%),
+    radial-gradient(rgb(228, 222, 63) 25.6%, transparent 25.6%);
+  background-position: 0px 0px, 104px 104px;
+  background-size: 208px 208px;
+  background-color: rgb(139, 69, 16);
 }
 
 .review_desc {
-  border-bottom: 2px solid black;
+  border-bottom: 2px dashed black;
   margin: 1em;
   padding: 0.2em 0.5em;
+  line-height: 1.5;
 }
 
 .release_desc {
-  border-bottom: 2px solid black;
+  border-bottom: 2px dashed black;
   margin: 1em;
   padding: 0.2em 0.5em;
+  line-height: 1.5;
 }
