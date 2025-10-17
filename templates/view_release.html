@@ -5,13 +5,14 @@
 {% endblock %}
 
 {% block body %}
-<h2>{{ release.title }}, {{ release.artist }}</h2>
-<p>
-({{ release.type }})
-</p>
-<h2>Julkaisuun liittyvät arvostelut</h2>
+<h2>{{ release.title }}, {{ release.artist }} ({{ release.type }})</h2>
+<h3>Julkaisuun liittyvät arvostelut ({{ release.review_count }})</h3>
 {% for review in reviews %}
-  <a href="/review/{{ review.id }}">{{ review.artist }}, {{ review.album_name }}, 
-    tähtiä {{ review.stars }}/5</a> <br / >
+  <div class="review_desc">
+    <a href="/review/{{ review.id }}">{{ review.album_name }}</a><br />
+    Artisti: {{ review.artist }}<br />
+    Tähtiä: {{ review.stars }}/5<br />
+    Käyttäjältä <a href="/user/{{ review.user_id }}">{{ review.username }}</a>
+  </div>
 {% endfor %}
 {% endblock %}

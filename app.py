@@ -261,7 +261,6 @@ def view_releases():
 @app.route("/release/<int:release_id>")
 def view_release(release_id):
     release = releases.get_release(release_id)
-    print(release)
     release_reviews = releases.get_release_reviews(release_id)
     if not release:
         abort(404)

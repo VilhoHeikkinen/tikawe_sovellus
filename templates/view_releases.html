@@ -7,7 +7,11 @@ Arvostellut julkaisut
 {% block body %}
 <h2>Arvostellut julkaisut</h2>
 {% for release in releases %}
-  <a href="/release/{{ release.id }}">{{ release.title }} ({{ release.type }}), {{ release.artist }}, 
-    tähtiä {{ release.stars_avg }}/5</a> <br / >
+  <div class="release_desc">
+    <a href="/release/{{ release.id }}">{{ release.title }} ({{ release.type }})</a> <br / >
+    Artisti: {{ release.artist }}<br />
+    Tähtien keskiarvo: {{ release.stars_avg }}/5<br />
+    Arvosteluiden määrä: {{ release.review_count }}
+  </div>
 {% endfor %}
 {% endblock %}

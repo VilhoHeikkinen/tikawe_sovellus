@@ -24,12 +24,29 @@ def update_stars_avg(release_id):
     db.execute(sql, [avg, release_id])
 
 def get_releases():
-    sql = "SELECT id, title, artist, type, stars_avg FROM releases ORDER BY title"
+    sql = """SELECT re.id,
+                    re.title,
+                    re.artist,
+                    re.type,
+                    re.stars_avg,
+                    COUNT(rv.id) AS review_count
+                    FROM releases re
+                    JOIN reviews rv ON re.id = rv.release_id
+                    GROUP BY re.id
+                    ORDER BY re.title"""
     return db.query(sql)
 
 def get_release(release_id):
-    sql = """SELECT title, artist, type, stars_avg FROM releases
-             WHERE id = ?"""
+    sql = """SELECT re.title,
+                    re.artist,
+                    re.type,
+                    re.stars_avg,
+                    COUNT(rv.id) AS review_count
+                    FROM releases re
+                    JOIN reviews rv ON re.id = rv.release_id
+                    WHERE re.id = ?
+                    GROUP BY re.id
+                    ORDER BY re.title"""
     result = db.query(sql, [release_id])
     return result[0] if result else None
 
@@ -38,6 +55,15 @@ def get_release_reviews(release_id):
              FROM reviews 
              WHERE release_id = ?
              ORDER BY id DESC"""
+    sql = """SELECT r.id,
+                    r.artist,
+                    r.album_name,
+                    r.stars,
+                    r.user_id,
+                    u.username
+             FROM reviews r, users u
+             WHERE r.release_id = ? AND r.user_id = u.id
+             ORDER BY r.id DESC"""
     return db.query(sql, [release_id])
 
 def delete_release(release_id):
