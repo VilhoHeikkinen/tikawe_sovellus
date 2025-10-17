@@ -1,64 +1,61 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>Muokkaa arvostelua</title>
-</head>
+{% block title %}
+Muokkaa arvostelua
+{% endblock %}
 
-<body>
-  <h1>Muokkaa arvostelua</h1>
-  <form action="/edit/{{ review.id }}" method="post" enctype="multipart/form-data">
+{% block body %}
+<h2>Muokkaa arvostelua</h2>
+<form action="/edit/{{ review.id }}" method="post" enctype="multipart/form-data">
+  <p>
+    Artisti: <br />
+    <input type="text" name="artist" value="{{ review.artist }}" maxlength="50" required />
+  </p>
+  <p>
+    Albumin tai kappaleen nimi: <br />
+    <input type="text" name="album_name" value="{{ review.album_name }} "maxlength="50" required  />
+  </p>
+  {% if review.has_image %}
+    <img src="/image/{{ review.id }}" />
+  {% endif %}
+  <p>
+    Vaihda kuva: <br />
+    <input type="file" name="image" value="{{ review.image }}" accept=".jpg, .jpeg" /> <br />
+    Poista kuva: <br />
+    <input type="checkbox" name="rm_img" />
+  </p>
+  {% for class in all_classes %}
     <p>
-      Artisti: <br />
-      <input type="text" name="artist" value="{{ review.artist }}" maxlength="50" required />
+      Valitse {{ class }}: <br />
+        <select name="classes">
+        {% for option in all_classes[class] %}
+          <option value="{{ class }}:{{ option }}"
+          {% if review_classes[class] == option %}selected{% endif %}>{{ option }}
+          </option>
+        {% endfor %}
+      </select>
     </p>
-    <p>
-      Albumin tai kappaleen nimi: <br />
-      <input type="text" name="album_name" value="{{ review.album_name }} "maxlength="50" required  />
-    </p>
-    {% if review.has_image %}
-      <img src="/image/{{ review.id }}" />
-    {% endif %}
-    <p>
-      Vaihda kuva: <br />
-      <input type="file" name="image" value="{{ review.image }}" accept=".jpg, .jpeg" /> <br />
-      Poista kuva: <br />
-      <input type="checkbox" name="rm_img" />
-    </p>
-    {% for class in all_classes %}
+    {% if class == "genre" %}
       <p>
-        Valitse {{ class }}: <br />
-          <select name="classes">
-          {% for option in all_classes[class] %}
-            <option value="{{ class }}:{{ option }}"
-            {% if review_classes[class] == option %}selected{% endif %}>{{ option }}
-            </option>
-          {% endfor %}
-        </select>
-      </p>
-      {% if class == "genre" %}
-        <p>
-          Tai lisää uusi genre <button type="button" 
-          title="Jos et löydä sopivaa genreä, niin voit kirjoittaa haluamasi tähän, ja se myöskin lisätään systeemiin">?
-          </button>: <br />
-          <input type="text" name="addgenre" maxlength="30" />
-          </p>
-      {% endif %}
-    {% endfor %}
-    <p>
-      Julkaisuvuosi: <br />
-      <input type="number" name="year" value="{{ review.year }}" min="1500" max="2025" required />
-    </p>
-    <p>
-      Tähtiä: <input type="text" name="stars" value="{{ review.stars }}" 
-               maxlength="3" pattern="^(?:[0-4](?:[.,]\d)?|5(?:\.0)?)$" required />/5
-    </p>
-    <p>
-      Arvio: <br />
-      <textarea name="review" rows="10" cols="60" maxlength="3000" required>{{ review.review }}</textarea>
-    </p>
-    <input type="submit" value="Valmis" />
-  </form>
-</body>
-
-</html>
+        Tai lisää uusi genre <button type="button" 
+        title="Jos et löydä sopivaa genreä, niin voit kirjoittaa haluamasi tähän, ja se myöskin lisätään systeemiin">?
+        </button>: <br />
+        <input type="text" name="addgenre" maxlength="30" />
+        </p>
+    {% endif %}
+  {% endfor %}
+  <p>
+    Julkaisuvuosi: <br />
+    <input type="number" name="year" value="{{ review.year }}" min="1500" max="2025" required />
+  </p>
+  <p>
+    Tähtiä: <input type="text" name="stars" value="{{ review.stars }}" 
+              maxlength="3" pattern="^(?:[0-4](?:[.,]\d)?|5(?:\.0)?)$" required />/5
+  </p>
+  <p>
+    Arvio: <br />
+    <textarea name="review" rows="10" cols="60" maxlength="3000" required>{{ review.review }}</textarea>
+  </p>
+  <input type="submit" value="Valmis" />
+</form>
+{% endblock %}

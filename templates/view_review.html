@@ -1,37 +1,34 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>{{ review.album_name }}</title>
-</head>
-  
-<body>
-  <h1>Käyttäjältä <a href="/user/{{ review.user_id }}">{{ review.username }}</a></h1>
-  <h1>{{ review.album_name }}, {{ review.artist }}</h1>
-  {% if review.has_image %}
-    <img src="/image/{{ review.id }}" />
-  {% endif %}
-  <p>
-    Julkaisuvuosi: {{ review.year }}
-  </p>
-  {% for class in classes %}
-    <p>
-    {{ class }}: {{ classes[class] }}
-    </p>
-  {% endfor %}
-  <p>
-    {{ review.stars }}/5 tähteä
-  </p>
-  <p>
-    {{ review.review }}
-  </p>
+{% block title %}
+{{ review.album_name }}
+{% endblock %}
 
-  {% if session.username == review.username %}
+{% block body %}
+<h1>Käyttäjältä <a href="/user/{{ review.user_id }}">{{ review.username }}</a></h1>
+<h1>{{ review.album_name }}, {{ review.artist }}</h1>
+{% if review.has_image %}
+  <img src="/image/{{ review.id }}" />
+{% endif %}
+<p>
+  Julkaisuvuosi: {{ review.year }}
+</p>
+{% for class in classes %}
   <p>
-    <a href="/edit/{{ review.id }}">Muokkaa arvostelua</a>
-    <a href="/remove/{{ review.id }}">Poista arvostelu</a>
+  {{ class }}: {{ classes[class] }}
   </p>
-  {% endif %}
-</body>
+{% endfor %}
+<p>
+  {{ review.stars }}/5 tähteä
+</p>
+<p>
+  {{ review.review }}
+</p>
 
-</html>
+{% if session.username == review.username %}
+<p>
+  <a href="/edit/{{ review.id }}">Muokkaa arvostelua</a>
+  <a href="/remove/{{ review.id }}">Poista arvostelu</a>
+</p>
+{% endif %}
+{% endblock %}

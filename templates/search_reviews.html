@@ -1,25 +1,19 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>Arvostelun haku</title>
-</head>
-  
-<body>
+{% block title %}
+Haku
+{% endblock %}
+
+{% block body %}
+<h2>Tulokset hakusanalla {{ query }}:</h2>
+{% if reviews %}
+  {% for review in reviews %}
+    <a href="/review/{{ review.id }}">{{ review.artist }}, {{ review.album_name }}, 
+    tähtiä {{ review.stars }}/5</a> <br / >
+  {% endfor %}
+{% else %}
   <p>
-    <a href="/">Palaa etusivulle</a>
+    Hakusi ei tuottanut yhtään tulosta 
   </p>
-  <h3>Tulokset hakusanalla {{ query }}:</h3>
-  {% if reviews %}
-    {% for review in reviews %}
-      <a href="/review/{{ review.id }}">{{ review.artist }}, {{ review.album_name }}, 
-      tähtiä {{ review.stars }}/5</a> <br / >
-    {% endfor %}
-  {% else %}
-    <p>
-      Hakusi ei tuottanut yhtään tulosta 
-    </p>
-  {% endif %}
-</body>
-
-</html>
+{% endif %}
+{% endblock %}

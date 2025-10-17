@@ -1,19 +1,16 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>Poista arvostelu</title>
-</head>
+{% block title %}
+Poista arvostelu
+{% endblock %}
 
-<body>
-  <h1>Poista arvostelu</h1>
-  <form action="/remove/{{ review.id }}" method="post">
-    <p>
-      Haluatko varmasti poistaa arvostelun?
-    </p>
-    <input type="submit" name="continue" value="Poista" />
-    <input type="submit" name="cancel" value="Peruuta" />
-  </form>
-</body>
-
-</html>
+{% block body %}
+<h2>Poista arvostelu</h2>
+<form action="/remove/{{ review.id }}" method="post">
+  <p>
+    Haluatko varmasti poistaa arvostelun?
+  </p>
+  <input type="submit" name="continue" value="Poista" />
+  <input type="submit" name="cancel" value="Peruuta" />
+</form>
+{% endblock %}

@@ -1,15 +1,13 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>Arvostellut julkaisut</title>
-</head>
-  <h1>Arvostellut julkaisut</h1>
-<body>
-  {% for release in releases %}
-    <a href="/release/{{ release.id }}">{{ release.title }} ({{ release.type }}), {{ release.artist }}, 
-      tähtiä {{ release.stars_avg }}/5</a> <br / >
-  {% endfor %}
-</body>
+{% block title %}
+Arvostellut julkaisut
+{% endblock %}
 
-</html>
+{% block body %}
+<h2>Arvostellut julkaisut</h2>
+{% for release in releases %}
+  <a href="/release/{{ release.id }}">{{ release.title }} ({{ release.type }}), {{ release.artist }}, 
+    tähtiä {{ release.stars_avg }}/5</a> <br / >
+{% endfor %}
+{% endblock %}

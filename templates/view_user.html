@@ -1,21 +1,18 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>Käyttäjä {{ user.username }}</title>
-</head>
-  
-<body>
-  <h1>Käyttäjä {{ user.username }}</h1>
-  {% if reviews|length > 0 %}
-    <h2>Arvosteluja {{ reviews|length }}:</h2>
-  {% else %}
-    <h2>Ei vielä arvosteluja</h2>
-  {% endif %}
-  {% for review in reviews %}
-    <a href="/review/{{ review.id }}">{{ review.artist }}, {{ review.album_name }}, 
-      tähtiä {{ review.stars }}/5</a> <br / >
-  {% endfor %}
-</body>
+{% block title %}
+Käyttäjä {{ user.username }}
+{% endblock %}
 
-</html>
+{% block body %}
+<h2>Käyttäjä {{ user.username }}</h2>
+{% if reviews|length > 0 %}
+  <h3>Arvosteluja {{ reviews|length }}:</h3>
+{% else %}
+  <h3>Ei vielä arvosteluja</h3>
+{% endif %}
+{% for review in reviews %}
+  <a href="/review/{{ review.id }}">{{ review.artist }}, {{ review.album_name }}, 
+    tähtiä {{ review.stars }}/5</a> <br / >
+{% endfor %}
+{% endblock %}

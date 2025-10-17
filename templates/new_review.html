@@ -1,57 +1,55 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>Uusi arvostelu</title>
-</head>
+{% block title %}
+Uusi arvostelu
+{% endblock %}
 
-<body>
-  <form action="/create_review" method="post" enctype="multipart/form-data">
+{% block body %}
+<h2>Uusi arvostelu</h2>
+<form action="/create_review" method="post" enctype="multipart/form-data">
+  <p>
+    Artisti: <br />
+    <input type="text" name="artist" maxlength="50" required />
+  </p>
+  <p>
+    Albumin tai kappaleen nimi: <br />
+    <input type="text" name="album_name" maxlength="50" required />
+  </p>
+  <p>
+    Lisää kuva: <br />
+    <input type="file" name="image" accept=".jpg, .jpeg" />
+  </p>
+  {% for class in classes %}
     <p>
-      Artisti: <br />
-      <input type="text" name="artist" maxlength="50" required />
+      Valitse {{ class }}: <br />
+        <select name="classes">
+        {% for option in classes[class] %}
+          <option value="{{ class }}:{{ option }}">{{ option }}</option>
+        {% endfor %}
+      </select>
     </p>
-    <p>
-      Albumin tai kappaleen nimi: <br />
-      <input type="text" name="album_name" maxlength="50" required />
-    </p>
-    <p>
-      Lisää kuva: <br />
-      <input type="file" name="image" accept=".jpg, .jpeg" />
-    </p>
-    {% for class in classes %}
+    {% if class == "genre" %}
       <p>
-        Valitse {{ class }}: <br />
-          <select name="classes">
-          {% for option in classes[class] %}
-            <option value="{{ class }}:{{ option }}">{{ option }}</option>
-          {% endfor %}
-        </select>
-      </p>
-      {% if class == "genre" %}
-        <p>
-          Tai lisää uusi genre <button type="button" 
-          title="Jos et löydä sopivaa genreä, niin voit kirjoittaa haluamasi tähän, ja se myöskin lisätään systeemiin">?
-          </button>: <br />
-          <input type="text" name="addgenre" maxlength="30" />
-          </p>
-      {% endif %}
-    {% endfor %}
-    <p>
-      Julkaisuvuosi: <br />
-      <input type="number" name="year" min="1500" max="2025" required />
-    </p>
-    <p>
-      Tähtiä: <input type="text" name="stars" maxlength="3" 
-               pattern="^(?:[0-4](?:[.,]\d)?|5(?:\.0)?)$" required />/5
-    </p>
-    <p>
-      Arvio: <br />
-      <textarea name="review" rows="10" cols="60" maxlength="3000" required></textarea> <br />
-      maksimipituus: 3000 merkkiä
-    </p>
-    <input type="submit" value="Julkaise arvostelu" />
-  </form>
-</body>
-
-</html>
+        Tai lisää uusi genre <button type="button" 
+        title="Jos et löydä sopivaa genreä, niin voit kirjoittaa haluamasi tähän, ja se myöskin lisätään systeemiin">?
+        </button>: <br />
+        <input type="text" name="addgenre" maxlength="30" />
+        </p>
+    {% endif %}
+  {% endfor %}
+  <p>
+    Julkaisuvuosi: <br />
+    <input type="number" name="year" min="1500" max="2025" required />
+  </p>
+  <p>
+    Tähtiä: <input type="text" name="stars" maxlength="3" 
+              pattern="^(?:[0-4](?:[.,]\d)?|5(?:\.0)?)$" required />/5
+  </p>
+  <p>
+    Arvio: <br />
+    <textarea name="review" rows="10" cols="60" maxlength="3000" required></textarea> <br />
+    maksimipituus: 3000 merkkiä
+  </p>
+  <input type="submit" value="Julkaise arvostelu" />
+</form>
+{% endblock %}
