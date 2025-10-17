@@ -8,8 +8,12 @@ Haku
 <h2>Tulokset hakusanalla {{ query }}:</h2>
 {% if reviews %}
   {% for review in reviews %}
-    <a href="/review/{{ review.id }}">{{ review.artist }}, {{ review.album_name }}, 
-    tähtiä {{ review.stars }}/5</a> <br / >
+    <div class="review_desc">
+      <a href="/review/{{ review.id }}">{{ review.album_name }}</a><br />
+      Artisti: {{ review.artist }}<br />
+      Tähtiä: {{ review.stars }}/5<br />
+      Käyttäjältä <a href="/user/{{ review.user_id }}">{{ review.username }}</a>
+    </div>
   {% endfor %}
 {% else %}
   <p>

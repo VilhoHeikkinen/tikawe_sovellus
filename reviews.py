@@ -67,10 +67,15 @@ def delete_review(review_id):
     db.execute(sql, [review_id])
 
 def search(query, classes):
-    sql = """SELECT id, artist, album_name, stars
-             FROM reviews r
-             WHERE (album_name LIKE ?
-             OR artist LIKE ?)"""
+    sql = """SELECT r.id,
+                    r.artist,
+                    r.album_name,
+                    r.stars,
+                    r.user_id,
+                    u.username
+             FROM reviews r, users u
+             WHERE r.user_id = u.id
+             AND (album_name LIKE ? OR artist LIKE ?)"""
     params = ["%" + query + "%", "%" + query + "%"]
 
     for title, value in classes:
@@ -82,7 +87,7 @@ def search(query, classes):
                    AND c.value = ?)"""
         params += [title, value]
 
-    sql += " ORDER BY id DESC"
+    sql += " ORDER BY r.id DESC"
 
     return db.query(sql, params)
 
