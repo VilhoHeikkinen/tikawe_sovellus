@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Hae arvostelua
+{% endblock %}
+
+{% block body %}
+<form action="/search_reviews" method="get">
+  <p>
+    Etsi arvostelua: <input type="text" name="query" value="{{ query }}"> <br />
+    <input type="submit" value="Etsi">
+  </p>
+  {% for class in classes %}
+    <p>
+      Valitse {{ class }}: <br />
+        <select name="classes">
+          <option value="">--</option>
+        {% for option in classes[class] %}
+          <option value="{{ class }}:{{ option }}">{{ option }}</option>
+        {% endfor %}
+      </select>
+    </p>
+  {% endfor %}
+{% endblock %}

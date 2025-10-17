@@ -223,6 +223,11 @@ def remove_review(review_id):
         if "cancel" in request.form:
             return redirect(f"/review/{str(review_id)}")
 
+@app.route("/search")
+def search():
+    classes = reviews.get_all_classes()
+    return render_template("/search.html", classes=classes)
+
 @app.route("/search_reviews")
 def search_reviews():
     query = request.args.get("query")
