@@ -23,7 +23,9 @@ html {
 }
 
 .review_desc {
-  border-bottom: 2px dashed black;
+  display: flex;
+  align-items: flex-start;
+  gap: 1em;
   margin: 0;
   padding: 0.2em 0.5em;
   line-height: 1.5;
@@ -42,4 +44,11 @@ html {
   white-space: pre-wrap;
   border-top: 2px solid black;
   line-height: 1.5;
+}
+
+.small-image,
+.small-image-placeholder {
+  width: 120px;
+  height: 120px;
+  background-color: #f2f2f2;
 }

@@ -19,6 +19,7 @@ def get_reviews():
                     r.album_name,
                     r.stars,
                     r.user_id,
+                    r.image IS NOT NULL has_image,
                     u.username
              FROM reviews r, users u
              WHERE r.user_id = u.id
